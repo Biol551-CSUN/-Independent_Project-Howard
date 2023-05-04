@@ -1,4 +1,4 @@
-# Independent_Project-Howard
+# Independent_Project_Howard
 This repository contains the final project assignment for BIO551 at CSUN (SPRING 23).
 
 These data were collected in 2004 to 2006 at Grassy Bog in the Apalachicola National Forest.  Approximate lat/lon of 30° 10' N, and 84° 56' W.  For more exact locations, contact the authors.		
