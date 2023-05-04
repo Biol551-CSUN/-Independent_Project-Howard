@@ -3,8 +3,8 @@ This repository contains the final project assignment for BIO551 at CSUN (SPRING
 
 # Background Information
 - These data were collected in 2004 to 2006 at Grassy Bog in the Apalachicola National Forest.  Approximate lat/lon of 30° 10' N, and 84° 56' W.  For more exact locations, contact the authors.		
-- For methods, see Miller and terHorst. 2012. Testing successional hypotheses of stability, heterogeneity, and diversity in pitcher-plant inquiline communities.  Oecologia 170:243-251.		
-		
+- For methods, see Miller and terHorst. 2012. Testing successional hypotheses of stability, heterogeneity, and diversity in pitcher-plant inquiline communities.  Oecologia 170:243-251. ![Link](https://www.researchgate.net/publication/221723029_Testing_successional_hypotheses_of_stability_heterogeneity_and_diversity_in_pitcher-plant_inquiline_communities)
+
 The data were collected using different methods, which are reflected by the colors of the columns		
 - white coumns identify the leaf being used and when it was sampled		
 - brown columns were physical aspects of each pitcher noted when it was censused every two weeks.		
