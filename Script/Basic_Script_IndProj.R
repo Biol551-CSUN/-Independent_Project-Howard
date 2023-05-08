@@ -7,7 +7,6 @@ library(crosstable)
 library(dplyr)
 library(vtable)
 library(gganimate)
-library(babynames)
 library(hrbrthemes)
 library(viridis)
 
