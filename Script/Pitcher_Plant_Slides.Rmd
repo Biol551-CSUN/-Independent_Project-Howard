@@ -2,8 +2,8 @@
 title: "Pitcher Plant Inquiline Communities"
 subtitle: "Exploring the diversity of Saracenia purpurea"
 author: "Kristen Howard"
-institute: "RStudio, PBC"
-date: "2016/12/12 (updated: `r Sys.Date()`)"
+institute: "terHorst Lab"
+date: "(updated: `r Sys.Date()`)"
 output:
   xaringan::moon_reader:
     lib_dir: libs
@@ -57,7 +57,7 @@ We found 100 leaf bodies and measured the following information:
 
 ---
 #Load Packages
-```{r,  eval=FALSE, warning=FALSE, message=FALSE, results = 'hide'}
+```{r}
 library(tidyverse)
 library(here)
 library(ggplot2)
@@ -74,8 +74,8 @@ library(ggpubr)
 
 ---
 # Load Data
-```{r,  eval=FALSE, warning=FALSE, message=FALSE, results = 'hide'}
-
+```{r}
+library(here)
 pitcher_plant_data <- read.csv(here("Data/pitcher_plant_data.csv"))
 View(pitcher_plant_data)
 ```
@@ -94,20 +94,29 @@ pitcher_plant_data$Mites <- as.numeric(pitcher_plant_data$Mites)
 
 # Next, calculate the sum of organisms for Plant Numeric ID 1
 ```{r}
-pitcher_plant_data$Total_organisms <- rowSums(pitcher_plant_data[,c("ants","spiders","beetle","Mosquito","Midges","Snot","Mites")])
+pitcher_plant_data$Total_organisms <- 
+
+rowSums(pitcher_plant_data[,c("ants","spiders","beetle","Mosquito","Midges","Snot","Mites")])
 ```
 ---
+
 # Create graph
 ```{r}
-ggplot(pitcher_plant_data, aes(x=leaf_age.days.,     y=Total_organisms)) + 
+library(ggplot2)
+
+ggplot(pitcher_plant_data, aes(x=leaf_age.days.,
+                               y=Total_organisms)) + 
   geom_line() +
-  labs(title = "Total Organisms Over Time in Plant A", x = "Age of Leaf", y = "Total Organisms")
+  labs(title = "Total Organisms Over Time in Plant A",
+       x = "Age of Leaf", 
+       y = "Total Organisms") 
 ```
 
 ---
 # Ridgeline Distrinution Plot
 This is showing the number of mites of leaf age
-```{r}
+.pull-left[
+```{r, plot-label2, eval=FALSE, warning=FALSE, message=FALSE, results = 'hide'}
 my_pal <- rcartocolor::carto_pal(n = 8, name = "Bold")[c(1, 3, 7, 2,4,5,6,8)]
 
 g_ridges <- 
@@ -126,10 +135,15 @@ g_ridges +
     alpha = .7, size = 1.5
   )
 ```
-
+]
+.pull-right[
+```{r plot-label-out, ref.label="plot-label", echo=FALSE, warning=FALSE, message=FALSE}
+```
+]
 ---
 # Marginal Plot
-```{r}
+.pull-left[
+```{r,plot-label, eval=FALSE, warning=FALSE, message=FALSE}
 ggscatterhist(pitcher_plant_data, 
               x = "leaf_age.days.", 
               y = "ants",
@@ -141,6 +155,11 @@ ggscatterhist(pitcher_plant_data,
   ggtheme = theme_bw()
   )
 ```
+]
+.pull-right[
+```{r plot-label-out, ref.label="plot-label", echo=FALSE, warning=FALSE, message=FALSE}
+```
+]
 
 ---
 # Summary Stats
@@ -156,9 +175,9 @@ df.summary
 ```{r}
 ggplot(df.summary, aes(x = Plant.ID.Alpha, 
                        y = ants_mean)) +
-  geom_bar(stat = "identity", fill = "lightgray", color = "black")+
-  
+  geom_bar(stat = "identity", fill = "green", color = "black") +
   geom_errorbar(aes(ymin = ants_mean, ymax = ants_sd), width = 0.2)
 
 ```
 ---
+

@@ -22,10 +22,10 @@ class: center, middle, inverse, title-slide
 ### Kristen Howard
 ]
 .institute[
-### RStudio, PBC
+### terHorst Lab
 ]
 .date[
-### 2016/12/12 (updated: 2023-05-08)
+### (updated: 2023-05-08)
 ]
 
 ---
@@ -59,11 +59,11 @@ I am interested in the inquiline community of Sarracenia Purpurea
 ---
 # Questions
 
--- What is the abundance of the organisms seen in purple pitcher plants?
+- What is the abundance of the organisms seen in purple pitcher plants?
 
--- Which Organisms have the highest abundances?
+- Which Organisms have the highest abundances?
 
--- Does the number of organisms seen depend on the age of the leaf?
+- Does the number of organisms seen depend on the age of the leaf?
 
 
 ---
@@ -241,6 +241,7 @@ library(ggpubr)
 # Load Data
 
 ```r
+library(here)
 pitcher_plant_data &lt;- read.csv(here("Data/pitcher_plant_data.csv"))
 View(pitcher_plant_data)
 ```
@@ -267,15 +268,23 @@ pitcher_plant_data$Mites &lt;- as.numeric(pitcher_plant_data$Mites)
 # Next, calculate the sum of organisms for Plant Numeric ID 1
 
 ```r
-pitcher_plant_data$Total_organisms &lt;- rowSums(pitcher_plant_data[,c("ants","spiders","beetle","Mosquito","Midges","Snot","Mites")])
+pitcher_plant_data$Total_organisms &lt;- 
+
+rowSums(pitcher_plant_data[,c("ants","spiders","beetle","Mosquito","Midges","Snot","Mites")])
 ```
 ---
+
 # Create graph
 
 ```r
-ggplot(pitcher_plant_data, aes(x=leaf_age.days., y=Total_organisms)) + 
+library(ggplot2)
+
+ggplot(pitcher_plant_data, aes(x=leaf_age.days.,
+                               y=Total_organisms)) + 
   geom_line() +
-  labs(title = "Total Organisms Over Time in Plant A", x = "Age of Leaf", y = "Total Organisms")
+  labs(title = "Total Organisms Over Time in Plant A",
+       x = "Age of Leaf", 
+       y = "Total Organisms") 
 ```
 
 ![](Pitcher_Plant_Slides_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
@@ -312,6 +321,7 @@ g_ridges +
 
 ---
 # Marginal Plot
+.pull-left[
 
 ```r
 ggscatterhist(pitcher_plant_data, 
@@ -325,8 +335,10 @@ ggscatterhist(pitcher_plant_data,
   ggtheme = theme_bw()
   )
 ```
-
-![](Pitcher_Plant_Slides_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+]
+.pull-right[
+![](Pitcher_Plant_Slides_files/figure-html/plot-label-out-1.png)&lt;!-- --&gt;
+]
 
 ---
 # Summary Stats
@@ -358,13 +370,13 @@ df.summary
 ```r
 ggplot(df.summary, aes(x = Plant.ID.Alpha, 
                        y = ants_mean)) +
-  geom_bar(stat = "identity", fill = "lightgray", color = "black")+
-  
+  geom_bar(stat = "identity", fill = "green", color = "black") +
   geom_errorbar(aes(ymin = ants_mean, ymax = ants_sd), width = 0.2)
 ```
 
-![](Pitcher_Plant_Slides_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+![](Pitcher_Plant_Slides_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
 ---
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
