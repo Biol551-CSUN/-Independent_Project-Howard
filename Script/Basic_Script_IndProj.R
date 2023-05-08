@@ -9,9 +9,10 @@ library(vtable)
 library(gganimate)
 library(hrbrthemes)
 library(viridis)
-
+library(ggridges)
+library(rcartocolor)
 #Load in Data
-pitcher_plant_data <- read.csv(here("Data/pitcher_plant_data.csv"))
+data <- read.csv(here("Data/pitcher_plant_data.csv"))
 View(pitcher_plant_data)
 
 # 80 leaves total, 10 leaves for
@@ -96,3 +97,76 @@ pitcher_plant_data %>%
 # pitcher plant over time. This graph is meant to show how the age of the leaf affects the number
 # of protozoans found inside of the pitcher plant which might indicate that over time, the leaves 
 # ability to consume resources decreases which leads to the demise of the plant. 
+
+
+# Convert the Date column to Date format
+pitcher_plant_data$Date <- as.Date(pitcher_plant_data$Date, format = "%m/%d/%Y")
+
+#Convert columns to numeric
+pitcher_plant_data$Mites <- as.numeric(pitcher_plant_data$Mites)
+
+### rotifers and after are characters, change to numeric
+
+# Sum the number of each organism per sample
+pitcher_plant_data$Total_organisms <- rowSums(pitcher_plant_data[,c("ants","spiders","beetle","Mosquito","Midges","Snot","Mites")])
+
+print(Total_organisms)
+# Create a time series plot of total organisms over time
+# ggplot(pitcher_plant_data, aes(x=leaf_age.days., y=Total_organisms)) + 
+#   geom_line() +
+#   labs(title = "Total Organisms Over Time in Plant A", x = "Age of Leaf", y = "Total Organisms")
+
+# 
+
+# ggplot(pitcher_plant_data, aes(x = 
+#                                y = )) +
+#   geom_jitter(aes(color = species),
+#             alpha = 0.4,
+#             width = 0.1
+#             height = 0
+#             size = 3,
+#             show.legend = FALSE) +
+#   scale_color_brewer(palette = "Dark2") + 
+#   theme_light()
+
+
+  # Create a ridgeline of different plant ids and the densit over the time of the leaf
+
+  # create a subset of the data with only the plant abundance columns
+  
+  abundance_data <- data[, c(2:7)]
+view(abundance_data)
+# convert the data to a long format
+abundance_data_long <- tidyr::gather(abundance_data, "leaf_age.days.", "abundance", -Plant.ID.Numeric)
+view(abundance_data_long)
+
+# plot the ridgeline density plot
+ggplot(abundance_data_long, aes(x = leaf_age.days.,
+                                y = Plant.ID.Numeric, 
+                                height = abundance, 
+                                fill = Plant.ID.Numeric)) +
+  geom_density_ridges_gradient(scale = 3, 
+                               rel_min_height = 0.01) +
+  scale_fill_viridis_d(option = "A", 
+                       begin = 0.1, 
+                       end = 0.9) +
+  labs(x = "Year", y = "Plant Numeric ID", fill = "Plant Numeric ID") +
+  theme_minimal()
+
+my_pal <- rcartocolor::carto_pal(n = 8, name = "Bold")[c(1, 3, 7, 2,4,5,6,8)]
+
+g_ridges <- 
+  ggplot(data, aes(leaf_age.days., fct_rev(Plant.ID.Alpha), color = Plant.ID.Alpha, fill = spiders)) + 
+  coord_cartesian(clip = "off") +
+  scale_y_discrete(expand = c(.07, .07)) +
+  scale_color_manual(values = my_pal, guide = "none") +
+  scale_fill_manual(values = my_pal, guide = "none") +
+  labs(x = "Leaf Age (Days)",
+       y = "Plant ID Alpha") + 
+  ggtitle("Organism Distribution Over Time") +
+  theme_minimal()
+
+g_ridges +
+  ggridges::geom_density_ridges(
+    alpha = .7, size = 1.5
+  )

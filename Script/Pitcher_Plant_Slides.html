@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Presentation Ninja</title>
+    <title>Pitcher Plant Inquiline Communities</title>
     <meta charset="utf-8" />
-    <meta name="author" content="Yihui Xie" />
+    <meta name="author" content="Kristen Howard" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
@@ -13,56 +13,362 @@
 class: center, middle, inverse, title-slide
 
 .title[
-# Presentation Ninja
+# Pitcher Plant Inquiline Communities
 ]
 .subtitle[
-## ⚔<br/>with xaringan
+## Exploring the diversity of Saracenia purpurea
 ]
 .author[
-### Yihui Xie
+### Kristen Howard
 ]
 .institute[
 ### RStudio, PBC
 ]
 .date[
-### 2016/12/12 (updated: 2023-05-04)
+### 2016/12/12 (updated: 2023-05-08)
 ]
 
 ---
 
 
-background-image: url(https://a4g2i6x9.stackpathcdn.com/wp-content/uploads/sites/22/2021/04/DZk88wBBls9jVn5PGJE8dqTD0XNKIq4BjZqVj5KV-600x400.jpeg)
 
-
-
-???
-
-Image credit: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Sharingan_triple.svg)
 
 ---
-class: center, middle
+class: inverse
+![](https://www.syfy.com/sites/syfy/files/2020/06/audrey2.jpg)
 
-# xaringan
+There are over 700 species of carnivorous plants around the world!
 
-### /ʃaː.'riŋ.ɡan/
-
+The feeding mechanism is very rare!
 ---
 class: inverse, center, middle
 
-# Get Started
+# Model System - Pitcher Plant Fun
 
 ---
 
-# Hello World
+# Model System
 
-Install the **xaringan** package from [Github](https://github.com/yihui/xaringan):
+I am interested in the inquiline community of Sarracenia Purpurea
+
+![](https://www.fs.usda.gov/wildflowers/plant-of-the-week/images/purplepitcherplant/SAPU4.gif)
+
+![](https://encrypted-tbn0.gstatic.com/licensed-image?q=tbn:ANd9GcQtPlfInivntq-h1tTAal_AqSd8H30TOtiNl5VEoDSNNd-dNPe_4db_zfCaKDHyFjK_jpLsQuiLjBJbGlk)
+
+---
+# Model System
+
+![](https://www.gardenia.net/storage/app/public/uploads/images/detail/75e09eb820b5dba9b3a7117a6ea98346.webp)
+
+---
+# Questions
+
+--What is the abundance of the organisms seen in purple pitcher plants?
+
+--Which Organisms have the highest abundances?
+
+--Does the number of organisms seen depend on the age of the leaf?
+
+
+---
+# Data Collection
+
+We found 100 leaf bodies and measured the following information:
+
+(column names or picture of excel sheet goes here)
+
+---
+#Load Packages
+
+```r
+library(tidyverse)
+```
+
+```
+## Warning: package 'tidyverse' was built under R version 4.2.2
+```
+
+```
+## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
+## ✔ ggplot2 3.4.1     ✔ purrr   1.0.1
+## ✔ tibble  3.1.8     ✔ dplyr   1.1.0
+## ✔ tidyr   1.3.0     ✔ stringr 1.5.0
+## ✔ readr   2.1.3     ✔ forcats 1.0.0
+```
+
+```
+## Warning: package 'ggplot2' was built under R version 4.2.2
+```
+
+```
+## Warning: package 'tidyr' was built under R version 4.2.2
+```
+
+```
+## Warning: package 'readr' was built under R version 4.2.2
+```
+
+```
+## Warning: package 'purrr' was built under R version 4.2.2
+```
+
+```
+## Warning: package 'dplyr' was built under R version 4.2.2
+```
+
+```
+## Warning: package 'stringr' was built under R version 4.2.2
+```
+
+```
+## Warning: package 'forcats' was built under R version 4.2.3
+```
+
+```
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+```
+
+```r
+library(here)
+```
+
+```
+## Warning: package 'here' was built under R version 4.2.2
+```
+
+```
+## here() starts at C:/Users/kdh19230/Desktop/Repository/Independent_Project_Howard
+```
+
+```r
+library(ggplot2)
+library(crosstable)
+```
+
+```
+## Warning: package 'crosstable' was built under R version 4.2.3
+```
+
+```
+## 
+## Attaching package: 'crosstable'
+## 
+## The following object is masked from 'package:purrr':
+## 
+##     compact
+```
+
+```r
+library(dplyr)
+library(vtable)
+```
+
+```
+## Warning: package 'vtable' was built under R version 4.2.3
+```
+
+```
+## Loading required package: kableExtra
+```
+
+```
+## Warning: package 'kableExtra' was built under R version 4.2.2
+```
+
+```
+## 
+## Attaching package: 'kableExtra'
+## 
+## The following object is masked from 'package:dplyr':
+## 
+##     group_rows
+```
+
+```r
+library(gganimate)
+```
+
+```
+## Warning: package 'gganimate' was built under R version 4.2.3
+```
+
+```r
+library(hrbrthemes)
+```
+
+```
+## Warning: package 'hrbrthemes' was built under R version 4.2.2
+```
+
+```
+## NOTE: Either Arial Narrow or Roboto Condensed fonts are required to use these themes.
+##       Please use hrbrthemes::import_roboto_condensed() to install Roboto Condensed and
+##       if Arial Narrow is not on your system, please see https://bit.ly/arialnarrow
+```
+
+```r
+library(viridis)
+```
+
+```
+## Warning: package 'viridis' was built under R version 4.2.2
+```
+
+```
+## Loading required package: viridisLite
+```
+
+```
+## Warning: package 'viridisLite' was built under R version 4.2.2
+```
+
+```r
+library(ggridges) # creates ridgeline plots
+```
+
+```
+## Warning: package 'ggridges' was built under R version 4.2.3
+```
+
+```r
+library(ggpubr)
+```
+
+```
+## Warning: package 'ggpubr' was built under R version 4.2.3
+```
+
+
+---
+# Load Data
+
+```r
+pitcher_plant_data &lt;- read.csv(here("Data/pitcher_plant_data.csv"))
+View(pitcher_plant_data)
+```
+
+---
+
+#Lets look at one particular plant ID and the number of organisms over the age the leaf
+
+First, we must convert the columns of interest into numerics (they are currently characters)
+
+```r
+#Convert columns to numeric
+pitcher_plant_data$Mites &lt;- as.numeric(pitcher_plant_data$Mites)
+```
+
+```
+## Warning: NAs introduced by coercion
+```
+
+```r
+### rotifers and after are characters, change to numeric
+```
+
+# Next, calculate the sum of organisms for Plant Numeric ID 1
+
+```r
+pitcher_plant_data$Total_organisms &lt;- rowSums(pitcher_plant_data[,c("ants","spiders","beetle","Mosquito","Midges","Snot","Mites")])
+```
+---
+# Create graph
+
+```r
+ggplot(pitcher_plant_data, aes(x=leaf_age.days., y=Total_organisms)) + 
+  geom_line() +
+  labs(title = "Total Organisms Over Time in Plant A", x = "Age of Leaf", y = "Total Organisms")
+```
+
+![](Pitcher_Plant_Slides_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+
+---
+# Ridgeline Distrinution Plot
+This is showing the number of mites of leaf age
+
+```r
+my_pal &lt;- rcartocolor::carto_pal(n = 8, name = "Bold")[c(1, 3, 7, 2,4,5,6,8)]
+
+g_ridges &lt;- 
+  ggplot(pitcher_plant_data, aes(leaf_age.days., fct_rev(Plant.ID.Alpha), color = Plant.ID.Alpha, fill = Plant.ID.Alpha)) + 
+  coord_cartesian(clip = "off") +
+  scale_y_discrete(expand = c(.07, .07)) +
+  scale_color_manual(values = my_pal, guide = "none") +
+  scale_fill_manual(values = my_pal, guide = "none") +
+  labs(x = "Leaf Age (Days)",
+       y = "Plant ID Alpha") + 
+  ggtitle("Organism Distribution Over Time") +
+  theme_minimal()
+
+g_ridges +
+  ggridges::geom_density_ridges(
+    alpha = .7, size = 1.5
+  )
+```
+
+```
+## Picking joint bandwidth of 33.4
+```
+
+![](Pitcher_Plant_Slides_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+
+---
+# Marginal Plot
+
+```r
+ggscatterhist(pitcher_plant_data, 
+              x = "leaf_age.days.", 
+              y = "ants",
+              color = "Plant.ID.Alpha", 
+              size = 3, 
+              alpha = 0.6,
+  palette = my_pal,
+  margin.plot = "boxplot",
+  ggtheme = theme_bw()
+  )
+```
+
+![](Pitcher_Plant_Slides_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+
+---
+# Summary Stats
+
+```r
+# Summary statistics
+df.summary &lt;- pitcher_plant_data %&gt;%
+  group_by(Plant.ID.Alpha) %&gt;%
+  summarise(ants_sd = sd(ants, na.rm = TRUE), ants_mean = mean(ants))
+df.summary
+```
+
+```
+## # A tibble: 8 × 3
+##   Plant.ID.Alpha ants_sd ants_mean
+##   &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;
+## 1 A                 8.98      3.22
+## 2 B                26.2       6.35
+## 3 C                17.0       4.83
+## 4 D                20.1       5.21
+## 5 E                13.1       3.94
+## 6 F                15.4       3.74
+## 7 G                 6.00      1.58
+## 8 H                18.7       5.15
+```
+---
 
 
 ```r
-remotes::install_github("yihui/xaringan")
+ggplot(df.summary, aes(x = Plant.ID.Alpha, 
+                       y = ants_mean)) +
+  geom_bar(stat = "identity", fill = "lightgray", color = "black")+
+  
+  geom_errorbar(aes(ymin = ants_mean, ymax = ants_sd), width = 0.2)
 ```
 
---
+![](Pitcher_Plant_Slides_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+---
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

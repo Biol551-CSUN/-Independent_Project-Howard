@@ -12,37 +12,158 @@ output:
       highlightLines: true
       countIncrementalSlides: false
 ---
-
-background-image: url(https://a4g2i6x9.stackpathcdn.com/wp-content/uploads/sites/22/2021/04/DZk88wBBls9jVn5PGJE8dqTD0XNKIq4BjZqVj5KV-600x400.jpeg)
-
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
 ```
 
-???
-
-Image credit: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Sharingan_triple.svg)
 
 ---
-class: center, middle
+class: inverse
+![](https://www.syfy.com/sites/syfy/files/2020/06/audrey2.jpg)
 
-# xaringan
+There are over 700 species of carnivorous plants around the world!
 
-### /ʃaː.'riŋ.ɡan/
-
+The feeding mechanism is very rare!
 ---
 class: inverse, center, middle
 
-# Get Started
+# Model System - Pitcher Plant Fun
 
 ---
 
-# Hello World
+# Model System
 
-Install the **xaringan** package from [Github](https://github.com/yihui/xaringan):
+I am interested in the inquiline community of Sarracenia Purpurea
 
-```{r eval=FALSE, tidy=FALSE}
-remotes::install_github("yihui/xaringan")
+![](https://www.fs.usda.gov/wildflowers/plant-of-the-week/images/purplepitcherplant/SAPU4.gif)
+
+![](https://encrypted-tbn0.gstatic.com/licensed-image?q=tbn:ANd9GcQtPlfInivntq-h1tTAal_AqSd8H30TOtiNl5VEoDSNNd-dNPe_4db_zfCaKDHyFjK_jpLsQuiLjBJbGlk)
+
+---
+# Model System
+
+![](https://www.gardenia.net/storage/app/public/uploads/images/detail/75e09eb820b5dba9b3a7117a6ea98346.webp)
+
+---
+# Questions
+
+--What is the abundance of the organisms seen in purple pitcher plants?
+
+--Which Organisms have the highest abundances?
+
+--Does the number of organisms seen depend on the age of the leaf?
+
+
+---
+# Data Collection
+
+We found 100 leaf bodies and measured the following information:
+
+(column names or picture of excel sheet goes here)
+
+---
+#Load Packages
+```{r}
+library(tidyverse)
+library(here)
+library(ggplot2)
+library(crosstable)
+library(dplyr)
+library(vtable)
+library(gganimate)
+library(hrbrthemes)
+library(viridis)
+library(ggridges) # creates ridgeline plots
+library(ggpubr)
 ```
 
---
+
+---
+# Load Data
+```{r}
+pitcher_plant_data <- read.csv(here("Data/pitcher_plant_data.csv"))
+View(pitcher_plant_data)
+```
+
+---
+
+#Lets look at one particular plant ID and the number of organisms over the age the leaf
+
+First, we must convert the columns of interest into numerics (they are currently characters)
+```{r}
+#Convert columns to numeric
+pitcher_plant_data$Mites <- as.numeric(pitcher_plant_data$Mites)
+
+### rotifers and after are characters, change to numeric
+```
+
+# Next, calculate the sum of organisms for Plant Numeric ID 1
+```{r}
+pitcher_plant_data$Total_organisms <- rowSums(pitcher_plant_data[,c("ants","spiders","beetle","Mosquito","Midges","Snot","Mites")])
+```
+---
+# Create graph
+```{r}
+ggplot(pitcher_plant_data, aes(x=leaf_age.days., y=Total_organisms)) + 
+  geom_line() +
+  labs(title = "Total Organisms Over Time in Plant A", x = "Age of Leaf", y = "Total Organisms")
+```
+
+---
+# Ridgeline Distrinution Plot
+This is showing the number of mites of leaf age
+```{r}
+my_pal <- rcartocolor::carto_pal(n = 8, name = "Bold")[c(1, 3, 7, 2,4,5,6,8)]
+
+g_ridges <- 
+  ggplot(pitcher_plant_data, aes(leaf_age.days., fct_rev(Plant.ID.Alpha), color = Plant.ID.Alpha, fill = Plant.ID.Alpha)) + 
+  coord_cartesian(clip = "off") +
+  scale_y_discrete(expand = c(.07, .07)) +
+  scale_color_manual(values = my_pal, guide = "none") +
+  scale_fill_manual(values = my_pal, guide = "none") +
+  labs(x = "Leaf Age (Days)",
+       y = "Plant ID Alpha") + 
+  ggtitle("Organism Distribution Over Time") +
+  theme_minimal()
+
+g_ridges +
+  ggridges::geom_density_ridges(
+    alpha = .7, size = 1.5
+  )
+```
+
+---
+# Marginal Plot
+```{r}
+ggscatterhist(pitcher_plant_data, 
+              x = "leaf_age.days.", 
+              y = "ants",
+              color = "Plant.ID.Alpha", 
+              size = 3, 
+              alpha = 0.6,
+  palette = my_pal,
+  margin.plot = "boxplot",
+  ggtheme = theme_bw()
+  )
+```
+
+---
+# Summary Stats
+```{r}
+# Summary statistics
+df.summary <- pitcher_plant_data %>%
+  group_by(Plant.ID.Alpha) %>%
+  summarise(ants_sd = sd(ants, na.rm = TRUE), ants_mean = mean(ants))
+df.summary
+```
+---
+
+```{r}
+ggplot(df.summary, aes(x = Plant.ID.Alpha, 
+                       y = ants_mean)) +
+  geom_bar(stat = "identity", fill = "lightgray", color = "black")+
+  
+  geom_errorbar(aes(ymin = ants_mean, ymax = ants_sd), width = 0.2)
+
+```
+---
