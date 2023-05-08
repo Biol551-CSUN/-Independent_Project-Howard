@@ -67,8 +67,8 @@ library(vtable)
 library(gganimate)
 library(hrbrthemes)
 library(viridis)
-library(ggridges) # creates ridgeline plots
-library(ggpubr)
+library(ggridges)
+library(rcartocolor)
 ```
 
 
