@@ -176,8 +176,10 @@ p <- ggplot(grouped_data,aes(x = leaf_age_, # Select X variable
    theme_classic() # Selects theme
 
 ggplotly(p, showlegend = FALSE) # Makes plot interactive and removes legend
-save_image(p, here("Output", "plot1.png"))
+
 ```
+
+
 ---
 class: middle, center
 
