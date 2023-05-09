@@ -240,8 +240,8 @@ Plant_summary %>%
       theme_minimal() + # select theme
       coord_flip() + # Flip 
   labs( y= "Average Number of Ants", # label Y-axis
-        x = "Plant ID") # label X-axis
-    
+        x = "Plant ID",  # label X-axis
+        title = "Ants found at each site") # Label title
 
 ```
 ---
@@ -263,7 +263,7 @@ pitcher_plant_data %>%
        y = "Number of Ants",
        title = "Number of Ants v.s. Number of Colpoda")+ # Label Y-axis
   geom_point() + # Points
-  theme(legend.title = "Plant Alpha ID") +
+  theme(legend.title = "Plant Alpha ID") + # Set legend title
   theme_minimal() + # Select theme 
   scale_color_manual(values = my_pal) # Apply custom color palette
 ```
