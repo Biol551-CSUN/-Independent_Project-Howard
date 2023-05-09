@@ -166,7 +166,7 @@ p <- ggplot(grouped_data,aes(x = leaf_age_, # Select X variable
                              y = total_organisms)) + # Select y Variable
   geom_line() + # Creates line
   geom_point() + # Creates points and selects color 
-  ggtitle('Organism Abundance over Time (Plant ID A Only)') + # Creates title
+  ggtitle('Organism Abundance over Time') + # Creates title
   labs(x = "Leaf age (days)", # Label X axis
        y = "Total organisms")  + # Label Y axis
    theme_classic() # Selects theme
@@ -216,7 +216,7 @@ class: middle, center
 Plant_summary <- pitcher_plant_data %>% # Select df
                       group_by(Plant.ID.Alpha) %>% # Group by variable of interest
                       summarise(ants_sd = sd(ants, na.rm = TRUE), ants_mean = mean(ants)) # Calculate sd and mean of the ant abundances
-                     Plant_summary # View table
+Plant_summary # View table
 ```
 ---
 # Bar Plot
@@ -246,8 +246,8 @@ class: middle, center
 
 
 ---
-.pull-left[
-```{r, plot5}
+
+```{r, plot5, eval=FALSE, warning=FALSE, message=FALSE}
 pitcher_plant_data %>%
     ggplot(aes(x = Colpoda, # Select X variable
                y = ants, # Select y variable
@@ -260,12 +260,12 @@ pitcher_plant_data %>%
   theme_minimal() + # Select theme 
   scale_color_manual(values = my_pal) # Apply custom color palette
 ```
-]
-.pull-right[
 
+---
+class: middle, center
 ```{r plot5-out, ref.label="plot5", echo=FALSE, warning=FALSE, message=FALSE}
 ```
-]
+
 
 ---
 
