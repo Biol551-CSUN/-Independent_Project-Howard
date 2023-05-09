@@ -12,17 +12,7 @@ output:
       highlightLines: true
       countIncrementalSlides: false
 ---
-
 class: inverse
-![](https://www.syfy.com/sites/syfy/files/2020/06/audrey2.jpg)
-
---
-class: inverse, center, middle
-**There are over 700 species of carnivorous plants around the world!**
-
-**.red[The feeding mechanism is very rare!]**
-
----
  # Outline of Presentation
  
  
@@ -37,6 +27,15 @@ class: inverse, center, middle
 --
 3. Data/Exploration
 
+---
+class: inverse
+![](https://www.syfy.com/sites/syfy/files/2020/06/audrey2.jpg)
+
+--
+class: inverse, center, middle
+**There are over 700 species of carnivorous plants around the world!**
+
+**.red[The feeding mechanism is very rare!]**
 
 ---
 class: inverse, center, middle
@@ -80,15 +79,12 @@ I am interested in the inquiline community of Sarracenia Purpurea
 
 We found 100 leaf bodies and measured the following information:
 
-
-![Screenshot](libs\Images\datasheet_screenshot.PNG)
-
+![Screenshot](libs\Images\data_dic.PNG)
 ---
-# Data Collection
+# Data Sheet
+
 
 ![Screenshot](libs\Images\datasheet_screenshot.PNG)
-
-
 ---
 #Load Packages
 ```{r, warning=FALSE, message=FALSE}
@@ -105,6 +101,7 @@ library(ggridges)
 library(ggpubr)
 library(rcartocolor)
 library(DT)
+library(plotly)
 ```
 
 ---
@@ -112,21 +109,29 @@ class: center, middle
 
 # Load Data
 ```{r, message = TRUE}
-library(here)
 pitcher_plant_data <- read.csv(here("Data/pitcher_plant_data.csv"))
-view(pitcher_plant_data)
 ```
 # Create Color Pallate
 ```{r}
 my_pal <- rcartocolor::carto_pal(n = 8, name = "Bold")[c(1, 3, 7, 2,4,5,6,8)]
 ```
 
+---
+# General Plot showing Abundances
+```{r, table1, warning=FALSE, message=FALSE}
+pitcher_plant_data %>%
+  group_by(Plant.ID.Alpha) %>% # Group by the specific plant ID
+  select(ants,spiders,beetle,other.prey,Mosquito) %>% # Select variables of interest
+  summarise_at(vars("ants":"Mosquito"),  mean, na.rm = TRUE) %>% # Calculates mean of selected columns
+  kable() %>% # Creates table
+  kable_styling(full_width = T)
+```
 
 ---
 # Marginal Plot
 
 .pull-up[
-```{r,plot-label, eval=FALSE, warning=FALSE, message=FALSE}
+```{r, plot1, fig.path="../Output/", eval=FALSE, warning=FALSE, message=FALSE}
 pitcher_plant_data %>%
       ggscatterhist( x = "leaf_age_", 
                      y = "ants",
@@ -135,44 +140,42 @@ pitcher_plant_data %>%
                      alpha = 0.6,
         palette = my_pal,
         margin.plot = "boxplot",
-        ggtheme = theme_bw()
+        xlab = "Number of Ants",
+        ylab = "Age of Leaf (Days)",
+        title = "Ant Abundances Over Time",
+        ggtheme = theme_bw() 
         )
 ```
 ]
 .pull-down[
-```{r wave-label-out, ref.label="wave-label", echo=FALSE}
+```{r plot1-out, ref.label="plot1", echo=FALSE}
 ```
 ]
+
 ---
-
-#Lets look at one particular plant ID and the number of organisms over the age the leaf
-
+# Specefic Plant ID Exploration
 First, we must convert the columns of interest into numerics (they are currently characters)
-```{r}
-#Convert columns to numeric
-pitcher_plant_data$Mites <- as.numeric(pitcher_plant_data$Mites)
-
-### rotifers and after are characters, change to numeric
-```
-
 # Next, calculate the sum of organisms for Plant Numeric ID 1
 ```{r}
-pitcher_plant_data$Total_organisms <- 
 
-rowSums(pitcher_plant_data[,c("ants","spiders","beetle","Mosquito","Midges","Snot","Mites")])
+pitch_A1 <- pitcher_plant_data %>%
+              filter(Plant.ID.Numeric == "1")
 ```
 ---
 # Create graph
 .pull-right[
 ```{r, plot3, eval=FALSE, warning=FALSE, message=FALSE}
-library(ggplot2)
-
-ggplot(pitcher_plant_data, aes(x=leaf_age_,
-                               y=Total_organisms)) + 
-  geom_line() +
-  labs(title = "Total Organisms Over Time in Plant A",
-       x = "Age of Leaf", 
-       y = "Total Organisms") 
+# pitch_A1 %>%
+#        filter(Plant.ID.Alpha == "A")
+#        ggplot(aes(x=leaf_age_, # select x variable of interest
+#                   y=Total_organisms,
+#                   color = Plant.ID.Alpha)) + # select y variable of interest
+#   labs(title = "Total Organisms ", # Label title
+#        x = "Age of Leaf", # Label X-axis
+#        y = "Total Organisms") + # Label Y-axis
+#         geom_boxplot() +
+#         geom_point(aes(color = Plant.ID.Alpha))+
+#         theme_minimal()
 ```
 ]
 .pull-left[
@@ -208,36 +211,37 @@ g_ridges +
 ```
 ]
 
-
 ---
-# Summary Stats
+# Box Plot
 ```{r}
 # Summary statistics
-df.summary <- pitcher_plant_data %>%
-  group_by(Plant.ID.Alpha) %>%
-  summarise(ants_sd = sd(ants, na.rm = TRUE), ants_mean = mean(ants))
-df.summary
+Plant_summary <- pitcher_plant_data %>% # Select df
+      group_by(Plant.ID.Alpha) %>% # Group by variable of interest
+      summarise(ants_sd = sd(ants, na.rm = TRUE), ants_mean = mean(ants)) # Calculate sd and mean of the ant abundances
+     Plant_summary # View table
 ```
 
 ---
 ```{r, bar_label}
-df.summary %>%
-  ggplot(aes(x = Plant.ID.Alpha, 
-              y = ants_mean)) +
+Plant_summary %>%
+  ggplot(aes(x = Plant.ID.Alpha, # Select x variable
+              y = ants_mean)) + # Select y variable
    geom_bar(stat = "identity", 
-            fill = my_pal, 
-            color = "black") +
-   geom_errorbar(aes(ymin = ants_mean, 
-                     ymax = ants_sd), 
+            fill = my_pal,  # Use custom palatte
+            color = "black") + # Outline of the bar
+   geom_errorbar(aes(ymin = ants_mean,  # Set the minimum y value to the mean of the ants
+                     ymax = ants_sd), # Set the maximum y value to the sd of the ants
                      width = 0.2) +
-      theme_minimal() +
-      coord_flip() +
-  labs( y= "Average Number of Ants",
-        x = "Plant ID")
+      theme_minimal() + # select theme
+      coord_flip() + # Flip 
+  labs( y= "Average Number of Ants", # label Y-axis
+        x = "Plant ID") # label X-axis
     
 
 ```
 
 ---
+class: center, middle, inverse
 # Thank you
-![Screenshot](libs\Images\datasheet_screenshot.PNG)
+# Questions?
+![Screenshot](libs\Images\kristen.sarracenia.PNG)

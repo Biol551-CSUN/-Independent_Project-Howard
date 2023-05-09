@@ -7,6 +7,8 @@
     <script src="libs/header-attrs-2.20/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+    <script src="libs/kePrint-0.0.1/kePrint.js"></script>
+    <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
   </head>
   <body>
     <textarea id="source">
@@ -25,22 +27,12 @@ class: center, middle, inverse, title-slide
 ### terHorst Lab
 ]
 .date[
-### (updated: 2023-05-08)
+### (updated: 2023-05-09)
 ]
 
 ---
 
-
 class: inverse
-![](https://www.syfy.com/sites/syfy/files/2020/06/audrey2.jpg)
-
---
-class: inverse, center, middle
-**There are over 700 species of carnivorous plants around the world!**
-
-**.red[The feeding mechanism is very rare!]**
-
----
  # Outline of Presentation
  
  
@@ -55,6 +47,15 @@ class: inverse, center, middle
 --
 3. Data/Exploration
 
+---
+class: inverse
+![](https://www.syfy.com/sites/syfy/files/2020/06/audrey2.jpg)
+
+--
+class: inverse, center, middle
+**There are over 700 species of carnivorous plants around the world!**
+
+**.red[The feeding mechanism is very rare!]**
 
 ---
 class: inverse, center, middle
@@ -98,15 +99,12 @@ I am interested in the inquiline community of Sarracenia Purpurea
 
 We found 100 leaf bodies and measured the following information:
 
-
-![Screenshot](libs\Images\datasheet_screenshot.PNG)
-
+![Screenshot](libs\Images\data_dic.PNG)
 ---
-# Data Collection
+# Data Sheet
+
 
 ![Screenshot](libs\Images\datasheet_screenshot.PNG)
-
-
 ---
 #Load Packages
 
@@ -124,6 +122,7 @@ library(ggridges)
 library(ggpubr)
 library(rcartocolor)
 library(DT)
+library(plotly)
 ```
 
 ---
@@ -132,9 +131,7 @@ class: center, middle
 # Load Data
 
 ```r
-library(here)
 pitcher_plant_data &lt;- read.csv(here("Data/pitcher_plant_data.csv"))
-view(pitcher_plant_data)
 ```
 # Create Color Pallate
 
@@ -142,6 +139,96 @@ view(pitcher_plant_data)
 my_pal &lt;- rcartocolor::carto_pal(n = 8, name = "Bold")[c(1, 3, 7, 2,4,5,6,8)]
 ```
 
+---
+# General Plot showing Abundances
+
+```r
+pitcher_plant_data %&gt;%
+  group_by(Plant.ID.Alpha) %&gt;% # Group by the specific plant ID
+  select(ants,spiders,beetle,other.prey,Mosquito) %&gt;% # Select variables of interest
+  summarise_at(vars("ants":"Mosquito"),  mean, na.rm = TRUE) %&gt;% # Calculates mean of selected columns
+  kable() %&gt;% # Creates table
+  kable_styling(full_width = T)
+```
+
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Plant.ID.Alpha &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; ants &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; spiders &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; beetle &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; other.prey &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Mosquito &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; A &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.217391 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0434783 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0000000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.173913 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; B &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.348485 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0000000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0000000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10.474576 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; C &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.830769 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0000000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0000000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.666667 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; D &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.205514 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0375940 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0325815 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9.911392 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; E &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.939655 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0323276 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0172414 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8.291391 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; F &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.740741 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0211640 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0291005 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8.919786 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; G &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.577540 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0267380 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0320856 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.080645 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; H &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.150000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0000000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0000000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.210526 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
 
 ---
 # Marginal Plot
@@ -157,61 +244,46 @@ pitcher_plant_data %&gt;%
                      alpha = 0.6,
         palette = my_pal,
         margin.plot = "boxplot",
-        ggtheme = theme_bw()
+        xlab = "Number of Ants",
+        ylab = "Age of Leaf (Days)",
+        title = "Ant Abundances Over Time",
+        ggtheme = theme_bw() 
         )
 ```
 ]
 .pull-down[
-
-```
-## Picking joint bandwidth of 33.4
-```
-
-![](Pitcher_Plant_Slides_files/figure-html/wave-label-out-1.png)&lt;!-- --&gt;
+![](Pitcher_Plant_Slides_files/figure-html/plot1-out-1.png)&lt;!-- --&gt;
 ]
+
 ---
-
-#Lets look at one particular plant ID and the number of organisms over the age the leaf
-
+# Specefic Plant ID Exploration
 First, we must convert the columns of interest into numerics (they are currently characters)
-
-```r
-#Convert columns to numeric
-pitcher_plant_data$Mites &lt;- as.numeric(pitcher_plant_data$Mites)
-```
-
-```
-## Warning: NAs introduced by coercion
-```
-
-```r
-### rotifers and after are characters, change to numeric
-```
-
 # Next, calculate the sum of organisms for Plant Numeric ID 1
 
 ```r
-pitcher_plant_data$Total_organisms &lt;- 
-
-rowSums(pitcher_plant_data[,c("ants","spiders","beetle","Mosquito","Midges","Snot","Mites")])
+pitch_A1 &lt;- pitcher_plant_data %&gt;%
+              filter(Plant.ID.Numeric == "1")
 ```
 ---
 # Create graph
 .pull-right[
 
 ```r
-library(ggplot2)
-
-ggplot(pitcher_plant_data, aes(x=leaf_age_,
-                               y=Total_organisms)) + 
-  geom_line() +
-  labs(title = "Total Organisms Over Time in Plant A",
-       x = "Age of Leaf", 
-       y = "Total Organisms") 
+# pitch_A1 %&gt;%
+#        filter(Plant.ID.Alpha == "A")
+#        ggplot(aes(x=leaf_age_, # select x variable of interest
+#                   y=Total_organisms,
+#                   color = Plant.ID.Alpha)) + # select y variable of interest
+#   labs(title = "Total Organisms ", # Label title
+#        x = "Age of Leaf", # Label X-axis
+#        y = "Total Organisms") + # Label Y-axis
+#         geom_boxplot() +
+#         geom_point(aes(color = Plant.ID.Alpha))+
+#         theme_minimal()
 ```
 ]
 .pull-left[
-![](Pitcher_Plant_Slides_files/figure-html/plot3-out-1.png)&lt;!-- --&gt;
+
 ]
 
 ---
@@ -243,14 +315,14 @@ g_ridges +
 ]
 
 ---
-# Summary Stats
+# Box Plot
 
 ```r
 # Summary statistics
-df.summary &lt;- pitcher_plant_data %&gt;%
-  group_by(Plant.ID.Alpha) %&gt;%
-  summarise(ants_sd = sd(ants, na.rm = TRUE), ants_mean = mean(ants))
-df.summary
+Plant_summary &lt;- pitcher_plant_data %&gt;% # Select df
+      group_by(Plant.ID.Alpha) %&gt;% # Group by variable of interest
+      summarise(ants_sd = sd(ants, na.rm = TRUE), ants_mean = mean(ants)) # Calculate sd and mean of the ant abundances
+     Plant_summary # View table
 ```
 
 ```
@@ -270,25 +342,28 @@ df.summary
 ---
 
 ```r
-df.summary %&gt;%
-  ggplot(aes(x = Plant.ID.Alpha, 
-              y = ants_mean)) +
+Plant_summary %&gt;%
+  ggplot(aes(x = Plant.ID.Alpha, # Select x variable
+              y = ants_mean)) + # Select y variable
    geom_bar(stat = "identity", 
-            fill = my_pal, 
-            color = "black") +
-   geom_errorbar(aes(ymin = ants_mean, 
-                     ymax = ants_sd), 
+            fill = my_pal,  # Use custom palatte
+            color = "black") + # Outline of the bar
+   geom_errorbar(aes(ymin = ants_mean,  # Set the minimum y value to the mean of the ants
+                     ymax = ants_sd), # Set the maximum y value to the sd of the ants
                      width = 0.2) +
-      theme_minimal() +
-      coord_flip() +
-  labs( y= "Average Number of Ants",
-        x = "Plant ID")
+      theme_minimal() + # select theme
+      coord_flip() + # Flip 
+  labs( y= "Average Number of Ants", # label Y-axis
+        x = "Plant ID") # label X-axis
 ```
 
 ![](Pitcher_Plant_Slides_files/figure-html/bar_label-1.png)&lt;!-- --&gt;
 
 ---
-
+class: center, middle, inverse
+# Thank you
+# Questions?
+![Screenshot](libs\Images\kristen.sarracenia.PNG)
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
