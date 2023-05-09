@@ -13,7 +13,7 @@ output:
       countIncrementalSlides: false
 ---
 class: inverse, middle 
- # Outline of Presentation
+ # Outline
  
  
 --
@@ -21,7 +21,7 @@ class: inverse, middle
 
 
 --
-2. Model System - Sarracenia purpurea
+2. Model System - _Sarracenia purpurea_
 
 
 --
@@ -35,7 +35,7 @@ class: inverse
 class: inverse, center, middle
 **There are over 700 species of carnivorous plants around the world!**
 
-**.red[The feeding mechanism is very rare!]**
+**[The feeding mechanism is very rare!]**
 
 ---
 class: inverse, center, middle
@@ -46,7 +46,7 @@ class: inverse, center, middle
 
 # Model System
 
-I am interested in the inquiline community of Sarracenia Purpurea
+I am interested in the inquiline community of _Sarracenia Purpurea_
 
 .center[
 <img src= "https://www.fs.usda.gov/wildflowers/plant-of-the-week/images/purplepitcherplant/SAPU4.gif",, width="50%"/>]
@@ -76,6 +76,9 @@ class: middle
 --
 - Does the number of organisms seen depend on the age of the leaf?
 
+--
+-Does the Presence of Colpoda (protozoa) affect the amount of ants seen?
+
 ---
 # Data Collection
 
@@ -102,6 +105,12 @@ We found 100 leaf bodies and measured the following information .orange[**every 
 
 ![Screenshot](libs\Images\datasheet_screenshot.PNG)
 ---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	fig.path = "../Output/")
+```
+
 #Load Packages
 ```{r, warning=FALSE, message=FALSE}
 library(tidyverse)
@@ -122,7 +131,7 @@ class: center, middle
 
 # Load Data
 ```{r, message = TRUE}
-pitcher_plant_data <- read.csv(here("Data/pitcher_plant_data.csv")) # Label Dataset
+pitcher_plant_data <- read.csv(here("Data/pitcher_plant_data.csv")) # Label Data set
 ```
 # Create Color Palatte
 ```{r}
@@ -130,18 +139,17 @@ my_pal <- rcartocolor::carto_pal(n = 8, name = "Bold")[c(1, 3, 7, 2,4,5,6,8)] # 
 ```
 
 ---
-# General Plot showing Abundances
+# General Table showing Abundances
 ```{r, table1, warning=FALSE, message=FALSE}
-pitcher_plant_data %>% # Select df
-  group_by(Plant.ID.Alpha) %>% # Group by the specific plant ID
-  select(ants,spiders,beetle,other.prey,Mosquito) %>% # Select variables of interest
-  summarise_at(vars("ants":"Mosquito"),  mean, na.rm = TRUE) %>% # Calculates mean of selected columns
-  kable() %>% # Creates table
-  kable_styling(full_width = T)
+pitcher_prey <- pitcher_plant_data %>% # Select df
+                    group_by(Plant.ID.Alpha) %>% # Group by the specific plant ID
+                    select(ants,spiders,beetle,other.prey,Mosquito) %>% # Select variables of interest
+                    summarise_at(vars("ants":"Mosquito"),  mean, na.rm = TRUE) %>% # Calculates mean of selected columns
+                    kable() %>% # Creates table
+                    kable_styling(full_width = T)
 ```
 ---
-# Specefic Plant Area Exploration
-# Exploration
+#Exploration
 Second, change the data column from a character to a date
 ```{r}
 # group by plant ID and leaf age, and sum the ant, spider, and beetle columns
@@ -151,7 +159,7 @@ grouped_data <- pitcher_plant_data %>%
 print(grouped_data)
 ```
 ---
-# Specific Plant Area Exploration
+# Exploration
 
 ```{r, plot1}
 p <- ggplot(grouped_data,aes(x = leaf_age_, # Select X variable
@@ -192,15 +200,16 @@ g_ridges +
   ggridges::geom_density_ridges(alpha = .7, # Sets the opacity
                                 size = 1.5) # Sets the size of the line
 ```
-
 ---
 class: middle, center
+
 
 ```{r plot2-out, ref.label="plot2", echo=FALSE, warning=FALSE, message=FALSE}
 ```
 
 
 ---
+
 # Bar Plot
 ```{r}
 # Summary statistics
@@ -209,14 +218,14 @@ Plant_summary <- pitcher_plant_data %>% # Select df
                       summarise(ants_sd = sd(ants, na.rm = TRUE), ants_mean = mean(ants)) # Calculate sd and mean of the ant abundances
                      Plant_summary # View table
 ```
-
 ---
+# Bar Plot
 ```{r, plot3}
 Plant_summary %>%
   ggplot(aes(x = Plant.ID.Alpha, # Select x variable
-              y = ants_mean)) + # Select y variable
+             y = ants_mean)) + # Select y variable
    geom_bar(stat = "identity", 
-            fill = my_pal,  # Use custom palatte
+            fill = my_pal,  # Use custom palette
             color = "black") + # Outline of the bar
    geom_errorbar(aes(ymin = ants_mean,  # Set the minimum y value to the mean of the ants
                      ymax = ants_sd), # Set the maximum y value to the sd of the ants
@@ -231,36 +240,12 @@ Plant_summary %>%
 ---
 class: middle, center
 
-```{r plot3-out, ref.label="plot3", echo=FALSE, warning=FALSE, message=FALSE}
+
+```{r plot3-out, ref.label="plot3", echo=FALSE}
 ```
+
 
 ---
-# Marginal Plot
-
-.pull-left[
-```{r, plot4, eval=FALSE, warning=FALSE, message=FALSE}
-pitcher_plant_data %>% # select df
-      ggscatterhist( x = "leaf_age_", # Select X variable
-                     y = "ants", # Select Y variable
-                     color = "Plant.ID.Alpha",  # Colors it by the Plant ID Alpha
-                     size = 3, # Sets the size of each point
-                     alpha = 0.6, # Sets the opacity of each point
-        palette = my_pal, # Select palette
-        margin.plot = "boxplot", # selects marginal plot
-        xlab = "Number of Ants", # Label X-Axis
-        ylab = "Age of Leaf (Days)", #Label Y- Axis
-        title = "Ant Abundances Over Time", # Label title
-        ggtheme = theme_bw()  # Sets theme
-        )
-```
-]
-.pull-right[
-```{r plot4-out, ref.label="plot4", echo=FALSE}
-```
-]
-
----
-# Does the Presence of Colpoda (protozoa) affect the amount of ants seen?
 .pull-left[
 ```{r, plot5}
 pitcher_plant_data %>%
@@ -277,9 +262,33 @@ pitcher_plant_data %>%
 ```
 ]
 .pull-right[
+
 ```{r plot5-out, ref.label="plot5", echo=FALSE, warning=FALSE, message=FALSE}
 ```
 ]
+
+---
+
+class: middle, center
+
+# Conclusion
+
+--
+
+
+- Ants have the highest abundance among the other insects.
+
+--
+
+
+- As the leaf ages, there is a decreasing trend in the total number of organisms observed.
+
+--
+
+
+- As the Number of Colpoda increases, there is a decrease in ant abundances.
+
+
 ---
 class: center, middle, inverse
 # Thank you

@@ -7,8 +7,6 @@
     <script src="libs/header-attrs-2.20/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
-    <script src="libs/kePrint-0.0.1/kePrint.js"></script>
-    <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
     <script src="libs/htmlwidgets-1.6.1/htmlwidgets.js"></script>
     <script src="libs/plotly-binding-4.10.1/plotly.js"></script>
     <script src="libs/typedarray-0.1/typedarray.min.js"></script>
@@ -41,7 +39,7 @@ class: center, middle, inverse, title-slide
 ---
 
 class: inverse, middle 
- # Outline of Presentation
+ # Outline
  
  
 --
@@ -49,7 +47,7 @@ class: inverse, middle
 
 
 --
-2. Model System - Sarracenia purpurea
+2. Model System - _Sarracenia purpurea_
 
 
 --
@@ -63,7 +61,7 @@ class: inverse
 class: inverse, center, middle
 **There are over 700 species of carnivorous plants around the world!**
 
-**.red[The feeding mechanism is very rare!]**
+**[The feeding mechanism is very rare!]**
 
 ---
 class: inverse, center, middle
@@ -74,7 +72,7 @@ class: inverse, center, middle
 
 # Model System
 
-I am interested in the inquiline community of Sarracenia Purpurea
+I am interested in the inquiline community of _Sarracenia Purpurea_
 
 .center[
 &lt;img src= "https://www.fs.usda.gov/wildflowers/plant-of-the-week/images/purplepitcherplant/SAPU4.gif",, width="50%"/&gt;]
@@ -104,6 +102,9 @@ class: middle
 --
 - Does the number of organisms seen depend on the age of the leaf?
 
+--
+-Does the Presence of Colpoda (protozoa) affect the amount of ants seen?
+
 ---
 # Data Collection
 
@@ -130,6 +131,9 @@ We found 100 leaf bodies and measured the following information .orange[**every 
 
 ![Screenshot](libs\Images\datasheet_screenshot.PNG)
 ---
+
+
+
 #Load Packages
 
 ```r
@@ -152,7 +156,7 @@ class: center, middle
 # Load Data
 
 ```r
-pitcher_plant_data &lt;- read.csv(here("Data/pitcher_plant_data.csv")) # Label Dataset
+pitcher_plant_data &lt;- read.csv(here("Data/pitcher_plant_data.csv")) # Label Data set
 ```
 # Create Color Palatte
 
@@ -161,98 +165,18 @@ my_pal &lt;- rcartocolor::carto_pal(n = 8, name = "Bold")[c(1, 3, 7, 2,4,5,6,8)]
 ```
 
 ---
-# General Plot showing Abundances
+# General Table showing Abundances
 
 ```r
-pitcher_plant_data %&gt;% # Select df
-  group_by(Plant.ID.Alpha) %&gt;% # Group by the specific plant ID
-  select(ants,spiders,beetle,other.prey,Mosquito) %&gt;% # Select variables of interest
-  summarise_at(vars("ants":"Mosquito"),  mean, na.rm = TRUE) %&gt;% # Calculates mean of selected columns
-  kable() %&gt;% # Creates table
-  kable_styling(full_width = T)
+pitcher_prey &lt;- pitcher_plant_data %&gt;% # Select df
+                    group_by(Plant.ID.Alpha) %&gt;% # Group by the specific plant ID
+                    select(ants,spiders,beetle,other.prey,Mosquito) %&gt;% # Select variables of interest
+                    summarise_at(vars("ants":"Mosquito"),  mean, na.rm = TRUE) %&gt;% # Calculates mean of selected columns
+                    kable() %&gt;% # Creates table
+                    kable_styling(full_width = T)
 ```
-
-&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:left;"&gt; Plant.ID.Alpha &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; ants &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; spiders &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; beetle &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; other.prey &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; Mosquito &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; A &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.217391 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.0434783 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.0000000 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 5.173913 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; B &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 6.348485 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.0000000 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.0000000 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 10.474576 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; C &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4.830769 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.0000000 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.0000000 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 6.666667 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; D &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 5.205514 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.0375940 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.0325815 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 9.911392 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; E &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.939655 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.0323276 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.0172414 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8.291391 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; F &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.740741 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.0211640 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.0291005 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8.919786 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; G &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1.577540 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.0267380 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.0320856 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 6.080645 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; H &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 5.150000 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.0000000 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.0000000 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2.210526 &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
 ---
-# Specefic Plant Area Exploration
-# Exploration
+#Exploration
 Second, change the data column from a character to a date
 
 ```r
@@ -280,7 +204,7 @@ print(grouped_data)
 ## # … with 109 more rows
 ```
 ---
-# Specific Plant Area Exploration
+# Exploration
 
 
 ```r
@@ -296,13 +220,13 @@ p &lt;- ggplot(grouped_data,aes(x = leaf_age_, # Select X variable
 ggplotly(p, showlegend = FALSE) # Makes plot interactive and removes legend
 ```
 
-<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-87e0ef2e55b6013e5a8d" style="width:504px;height:504px;"></div>
-<script type="application/json" data-for="htmlwidget-87e0ef2e55b6013e5a8d">{"x":{"data":[{"x":[0,12,13,14,16,19,25,28,29,30,33,40,42,44,47,56,57,58,62,68,70,71,72,75,83,84,85,87,90,96,98,99,100,102,104,112,113,115,116,118,124,126,127,129,130,132,140,141,143,145,146,152,154,155,157,160,168,169,171,174,180,182,183,185,188,190,196,197,199,202,209,210,211,213,215,216,224,225,227,230,238,239,241,242,252,253,255,258,266,267,272,280,281,283,286,294,295,297,300,308,309,314,322,323,328,336,337,342,351,356,364,365,370,380,384,393,398,413,426],"y":[949,154,345,1448,11,200,338,487,140,0,150,284,319,89,24,389,5,14,25,55,179,11,3,5,0,246,0,1,0,5,252,0,3,0,2,176,1,2,0,3,1,80,0,0,0,1,31,0,2,0,1,2,30,0,0,0,17,0,0,0,3,23,0,1,0,0,29,0,0,0,0,11,4,0,0,0,14,0,0,0,10,4,0,0,9,0,0,0,2,1,0,3,0,0,0,1,2,0,0,5,0,0,0,0,1,1,0,0,2,0,0,0,0,0,0,0,0,0,0],"text":["leaf_age_:   0<br />total_organisms:  949","leaf_age_:  12<br />total_organisms:  154","leaf_age_:  13<br />total_organisms:  345","leaf_age_:  14<br />total_organisms: 1448","leaf_age_:  16<br />total_organisms:   11","leaf_age_:  19<br />total_organisms:  200","leaf_age_:  25<br />total_organisms:  338","leaf_age_:  28<br />total_organisms:  487","leaf_age_:  29<br />total_organisms:  140","leaf_age_:  30<br />total_organisms:    0","leaf_age_:  33<br />total_organisms:  150","leaf_age_:  40<br />total_organisms:  284","leaf_age_:  42<br />total_organisms:  319","leaf_age_:  44<br />total_organisms:   89","leaf_age_:  47<br />total_organisms:   24","leaf_age_:  56<br />total_organisms:  389","leaf_age_:  57<br />total_organisms:    5","leaf_age_:  58<br />total_organisms:   14","leaf_age_:  62<br />total_organisms:   25","leaf_age_:  68<br />total_organisms:   55","leaf_age_:  70<br />total_organisms:  179","leaf_age_:  71<br />total_organisms:   11","leaf_age_:  72<br />total_organisms:    3","leaf_age_:  75<br />total_organisms:    5","leaf_age_:  83<br />total_organisms:    0","leaf_age_:  84<br />total_organisms:  246","leaf_age_:  85<br />total_organisms:    0","leaf_age_:  87<br />total_organisms:    1","leaf_age_:  90<br />total_organisms:    0","leaf_age_:  96<br />total_organisms:    5","leaf_age_:  98<br />total_organisms:  252","leaf_age_:  99<br />total_organisms:    0","leaf_age_: 100<br />total_organisms:    3","leaf_age_: 102<br />total_organisms:    0","leaf_age_: 104<br />total_organisms:    2","leaf_age_: 112<br />total_organisms:  176","leaf_age_: 113<br />total_organisms:    1","leaf_age_: 115<br />total_organisms:    2","leaf_age_: 116<br />total_organisms:    0","leaf_age_: 118<br />total_organisms:    3","leaf_age_: 124<br />total_organisms:    1","leaf_age_: 126<br />total_organisms:   80","leaf_age_: 127<br />total_organisms:    0","leaf_age_: 129<br />total_organisms:    0","leaf_age_: 130<br />total_organisms:    0","leaf_age_: 132<br />total_organisms:    1","leaf_age_: 140<br />total_organisms:   31","leaf_age_: 141<br />total_organisms:    0","leaf_age_: 143<br />total_organisms:    2","leaf_age_: 145<br />total_organisms:    0","leaf_age_: 146<br />total_organisms:    1","leaf_age_: 152<br />total_organisms:    2","leaf_age_: 154<br />total_organisms:   30","leaf_age_: 155<br />total_organisms:    0","leaf_age_: 157<br />total_organisms:    0","leaf_age_: 160<br />total_organisms:    0","leaf_age_: 168<br />total_organisms:   17","leaf_age_: 169<br />total_organisms:    0","leaf_age_: 171<br />total_organisms:    0","leaf_age_: 174<br />total_organisms:    0","leaf_age_: 180<br />total_organisms:    3","leaf_age_: 182<br />total_organisms:   23","leaf_age_: 183<br />total_organisms:    0","leaf_age_: 185<br />total_organisms:    1","leaf_age_: 188<br />total_organisms:    0","leaf_age_: 190<br />total_organisms:    0","leaf_age_: 196<br />total_organisms:   29","leaf_age_: 197<br />total_organisms:    0","leaf_age_: 199<br />total_organisms:    0","leaf_age_: 202<br />total_organisms:    0","leaf_age_: 209<br />total_organisms:    0","leaf_age_: 210<br />total_organisms:   11","leaf_age_: 211<br />total_organisms:    4","leaf_age_: 213<br />total_organisms:    0","leaf_age_: 215<br />total_organisms:    0","leaf_age_: 216<br />total_organisms:    0","leaf_age_: 224<br />total_organisms:   14","leaf_age_: 225<br />total_organisms:    0","leaf_age_: 227<br />total_organisms:    0","leaf_age_: 230<br />total_organisms:    0","leaf_age_: 238<br />total_organisms:   10","leaf_age_: 239<br />total_organisms:    4","leaf_age_: 241<br />total_organisms:    0","leaf_age_: 242<br />total_organisms:    0","leaf_age_: 252<br />total_organisms:    9","leaf_age_: 253<br />total_organisms:    0","leaf_age_: 255<br />total_organisms:    0","leaf_age_: 258<br />total_organisms:    0","leaf_age_: 266<br />total_organisms:    2","leaf_age_: 267<br />total_organisms:    1","leaf_age_: 272<br />total_organisms:    0","leaf_age_: 280<br />total_organisms:    3","leaf_age_: 281<br />total_organisms:    0","leaf_age_: 283<br />total_organisms:    0","leaf_age_: 286<br />total_organisms:    0","leaf_age_: 294<br />total_organisms:    1","leaf_age_: 295<br />total_organisms:    2","leaf_age_: 297<br />total_organisms:    0","leaf_age_: 300<br />total_organisms:    0","leaf_age_: 308<br />total_organisms:    5","leaf_age_: 309<br />total_organisms:    0","leaf_age_: 314<br />total_organisms:    0","leaf_age_: 322<br />total_organisms:    0","leaf_age_: 323<br />total_organisms:    0","leaf_age_: 328<br />total_organisms:    1","leaf_age_: 336<br />total_organisms:    1","leaf_age_: 337<br />total_organisms:    0","leaf_age_: 342<br />total_organisms:    0","leaf_age_: 351<br />total_organisms:    2","leaf_age_: 356<br />total_organisms:    0","leaf_age_: 364<br />total_organisms:    0","leaf_age_: 365<br />total_organisms:    0","leaf_age_: 370<br />total_organisms:    0","leaf_age_: 380<br />total_organisms:    0","leaf_age_: 384<br />total_organisms:    0","leaf_age_: 393<br />total_organisms:    0","leaf_age_: 398<br />total_organisms:    0","leaf_age_: 413<br />total_organisms:    0","leaf_age_: 426<br />total_organisms:    0"],"type":"scatter","mode":"lines+markers","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(0,0,0,1)","opacity":1,"size":5.66929133858268,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"}},"frame":null}],"layout":{"margin":{"t":40.8401826484018,"r":7.30593607305936,"b":37.2602739726027,"l":48.9497716894977},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"title":{"text":"Organism Abundance over Time (Plant ID A Only)","font":{"color":"rgba(0,0,0,1)","family":"","size":17.5342465753425},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-21.3,447.3],"tickmode":"array","ticktext":["0","100","200","300","400"],"tickvals":[0,100,200,300,400],"categoryorder":"array","categoryarray":["0","100","200","300","400"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":true,"linecolor":"rgba(0,0,0,1)","linewidth":0.66417600664176,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"Leaf age (days)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-72.4,1520.4],"tickmode":"array","ticktext":["0","500","1000","1500"],"tickvals":[0,500,1000,1500],"categoryorder":"array","categoryarray":["0","500","1000","1500"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":true,"linecolor":"rgba(0,0,0,1)","linewidth":0.66417600664176,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"x","title":{"text":"Total organisms","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.689497716895}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"57ac295a4d0f":{"x":{},"y":{},"type":"scatter"},"57ac22cd47d3":{"x":{},"y":{}}},"cur_data":"57ac295a4d0f","visdat":{"57ac295a4d0f":["function (y) ","x"],"57ac22cd47d3":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-7cbb2292ba90b683fe37" style="width:504px;height:504px;"></div>
+<script type="application/json" data-for="htmlwidget-7cbb2292ba90b683fe37">{"x":{"data":[{"x":[0,12,13,14,16,19,25,28,29,30,33,40,42,44,47,56,57,58,62,68,70,71,72,75,83,84,85,87,90,96,98,99,100,102,104,112,113,115,116,118,124,126,127,129,130,132,140,141,143,145,146,152,154,155,157,160,168,169,171,174,180,182,183,185,188,190,196,197,199,202,209,210,211,213,215,216,224,225,227,230,238,239,241,242,252,253,255,258,266,267,272,280,281,283,286,294,295,297,300,308,309,314,322,323,328,336,337,342,351,356,364,365,370,380,384,393,398,413,426],"y":[949,154,345,1448,11,200,338,487,140,0,150,284,319,89,24,389,5,14,25,55,179,11,3,5,0,246,0,1,0,5,252,0,3,0,2,176,1,2,0,3,1,80,0,0,0,1,31,0,2,0,1,2,30,0,0,0,17,0,0,0,3,23,0,1,0,0,29,0,0,0,0,11,4,0,0,0,14,0,0,0,10,4,0,0,9,0,0,0,2,1,0,3,0,0,0,1,2,0,0,5,0,0,0,0,1,1,0,0,2,0,0,0,0,0,0,0,0,0,0],"text":["leaf_age_:   0<br />total_organisms:  949","leaf_age_:  12<br />total_organisms:  154","leaf_age_:  13<br />total_organisms:  345","leaf_age_:  14<br />total_organisms: 1448","leaf_age_:  16<br />total_organisms:   11","leaf_age_:  19<br />total_organisms:  200","leaf_age_:  25<br />total_organisms:  338","leaf_age_:  28<br />total_organisms:  487","leaf_age_:  29<br />total_organisms:  140","leaf_age_:  30<br />total_organisms:    0","leaf_age_:  33<br />total_organisms:  150","leaf_age_:  40<br />total_organisms:  284","leaf_age_:  42<br />total_organisms:  319","leaf_age_:  44<br />total_organisms:   89","leaf_age_:  47<br />total_organisms:   24","leaf_age_:  56<br />total_organisms:  389","leaf_age_:  57<br />total_organisms:    5","leaf_age_:  58<br />total_organisms:   14","leaf_age_:  62<br />total_organisms:   25","leaf_age_:  68<br />total_organisms:   55","leaf_age_:  70<br />total_organisms:  179","leaf_age_:  71<br />total_organisms:   11","leaf_age_:  72<br />total_organisms:    3","leaf_age_:  75<br />total_organisms:    5","leaf_age_:  83<br />total_organisms:    0","leaf_age_:  84<br />total_organisms:  246","leaf_age_:  85<br />total_organisms:    0","leaf_age_:  87<br />total_organisms:    1","leaf_age_:  90<br />total_organisms:    0","leaf_age_:  96<br />total_organisms:    5","leaf_age_:  98<br />total_organisms:  252","leaf_age_:  99<br />total_organisms:    0","leaf_age_: 100<br />total_organisms:    3","leaf_age_: 102<br />total_organisms:    0","leaf_age_: 104<br />total_organisms:    2","leaf_age_: 112<br />total_organisms:  176","leaf_age_: 113<br />total_organisms:    1","leaf_age_: 115<br />total_organisms:    2","leaf_age_: 116<br />total_organisms:    0","leaf_age_: 118<br />total_organisms:    3","leaf_age_: 124<br />total_organisms:    1","leaf_age_: 126<br />total_organisms:   80","leaf_age_: 127<br />total_organisms:    0","leaf_age_: 129<br />total_organisms:    0","leaf_age_: 130<br />total_organisms:    0","leaf_age_: 132<br />total_organisms:    1","leaf_age_: 140<br />total_organisms:   31","leaf_age_: 141<br />total_organisms:    0","leaf_age_: 143<br />total_organisms:    2","leaf_age_: 145<br />total_organisms:    0","leaf_age_: 146<br />total_organisms:    1","leaf_age_: 152<br />total_organisms:    2","leaf_age_: 154<br />total_organisms:   30","leaf_age_: 155<br />total_organisms:    0","leaf_age_: 157<br />total_organisms:    0","leaf_age_: 160<br />total_organisms:    0","leaf_age_: 168<br />total_organisms:   17","leaf_age_: 169<br />total_organisms:    0","leaf_age_: 171<br />total_organisms:    0","leaf_age_: 174<br />total_organisms:    0","leaf_age_: 180<br />total_organisms:    3","leaf_age_: 182<br />total_organisms:   23","leaf_age_: 183<br />total_organisms:    0","leaf_age_: 185<br />total_organisms:    1","leaf_age_: 188<br />total_organisms:    0","leaf_age_: 190<br />total_organisms:    0","leaf_age_: 196<br />total_organisms:   29","leaf_age_: 197<br />total_organisms:    0","leaf_age_: 199<br />total_organisms:    0","leaf_age_: 202<br />total_organisms:    0","leaf_age_: 209<br />total_organisms:    0","leaf_age_: 210<br />total_organisms:   11","leaf_age_: 211<br />total_organisms:    4","leaf_age_: 213<br />total_organisms:    0","leaf_age_: 215<br />total_organisms:    0","leaf_age_: 216<br />total_organisms:    0","leaf_age_: 224<br />total_organisms:   14","leaf_age_: 225<br />total_organisms:    0","leaf_age_: 227<br />total_organisms:    0","leaf_age_: 230<br />total_organisms:    0","leaf_age_: 238<br />total_organisms:   10","leaf_age_: 239<br />total_organisms:    4","leaf_age_: 241<br />total_organisms:    0","leaf_age_: 242<br />total_organisms:    0","leaf_age_: 252<br />total_organisms:    9","leaf_age_: 253<br />total_organisms:    0","leaf_age_: 255<br />total_organisms:    0","leaf_age_: 258<br />total_organisms:    0","leaf_age_: 266<br />total_organisms:    2","leaf_age_: 267<br />total_organisms:    1","leaf_age_: 272<br />total_organisms:    0","leaf_age_: 280<br />total_organisms:    3","leaf_age_: 281<br />total_organisms:    0","leaf_age_: 283<br />total_organisms:    0","leaf_age_: 286<br />total_organisms:    0","leaf_age_: 294<br />total_organisms:    1","leaf_age_: 295<br />total_organisms:    2","leaf_age_: 297<br />total_organisms:    0","leaf_age_: 300<br />total_organisms:    0","leaf_age_: 308<br />total_organisms:    5","leaf_age_: 309<br />total_organisms:    0","leaf_age_: 314<br />total_organisms:    0","leaf_age_: 322<br />total_organisms:    0","leaf_age_: 323<br />total_organisms:    0","leaf_age_: 328<br />total_organisms:    1","leaf_age_: 336<br />total_organisms:    1","leaf_age_: 337<br />total_organisms:    0","leaf_age_: 342<br />total_organisms:    0","leaf_age_: 351<br />total_organisms:    2","leaf_age_: 356<br />total_organisms:    0","leaf_age_: 364<br />total_organisms:    0","leaf_age_: 365<br />total_organisms:    0","leaf_age_: 370<br />total_organisms:    0","leaf_age_: 380<br />total_organisms:    0","leaf_age_: 384<br />total_organisms:    0","leaf_age_: 393<br />total_organisms:    0","leaf_age_: 398<br />total_organisms:    0","leaf_age_: 413<br />total_organisms:    0","leaf_age_: 426<br />total_organisms:    0"],"type":"scatter","mode":"lines+markers","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(0,0,0,1)","opacity":1,"size":5.66929133858268,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"}},"frame":null}],"layout":{"margin":{"t":40.8401826484018,"r":7.30593607305936,"b":37.2602739726027,"l":48.9497716894977},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"title":{"text":"Organism Abundance over Time (Plant ID A Only)","font":{"color":"rgba(0,0,0,1)","family":"","size":17.5342465753425},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-21.3,447.3],"tickmode":"array","ticktext":["0","100","200","300","400"],"tickvals":[0,100,200,300,400],"categoryorder":"array","categoryarray":["0","100","200","300","400"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":true,"linecolor":"rgba(0,0,0,1)","linewidth":0.66417600664176,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"Leaf age (days)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-72.4,1520.4],"tickmode":"array","ticktext":["0","500","1000","1500"],"tickvals":[0,500,1000,1500],"categoryorder":"array","categoryarray":["0","500","1000","1500"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":true,"linecolor":"rgba(0,0,0,1)","linewidth":0.66417600664176,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"x","title":{"text":"Total organisms","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.689497716895}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"24c03801673":{"x":{},"y":{},"type":"scatter"},"24c032075fc9":{"x":{},"y":{}}},"cur_data":"24c03801673","visdat":{"24c03801673":["function (y) ","x"],"24c032075fc9":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 ---
 class: middle, center
 
-<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-e28e7193beea50cd82aa" style="width:504px;height:504px;"></div>
-<script type="application/json" data-for="htmlwidget-e28e7193beea50cd82aa">{"x":{"data":[{"x":[0,12,13,14,16,19,25,28,29,30,33,40,42,44,47,56,57,58,62,68,70,71,72,75,83,84,85,87,90,96,98,99,100,102,104,112,113,115,116,118,124,126,127,129,130,132,140,141,143,145,146,152,154,155,157,160,168,169,171,174,180,182,183,185,188,190,196,197,199,202,209,210,211,213,215,216,224,225,227,230,238,239,241,242,252,253,255,258,266,267,272,280,281,283,286,294,295,297,300,308,309,314,322,323,328,336,337,342,351,356,364,365,370,380,384,393,398,413,426],"y":[949,154,345,1448,11,200,338,487,140,0,150,284,319,89,24,389,5,14,25,55,179,11,3,5,0,246,0,1,0,5,252,0,3,0,2,176,1,2,0,3,1,80,0,0,0,1,31,0,2,0,1,2,30,0,0,0,17,0,0,0,3,23,0,1,0,0,29,0,0,0,0,11,4,0,0,0,14,0,0,0,10,4,0,0,9,0,0,0,2,1,0,3,0,0,0,1,2,0,0,5,0,0,0,0,1,1,0,0,2,0,0,0,0,0,0,0,0,0,0],"text":["leaf_age_:   0<br />total_organisms:  949","leaf_age_:  12<br />total_organisms:  154","leaf_age_:  13<br />total_organisms:  345","leaf_age_:  14<br />total_organisms: 1448","leaf_age_:  16<br />total_organisms:   11","leaf_age_:  19<br />total_organisms:  200","leaf_age_:  25<br />total_organisms:  338","leaf_age_:  28<br />total_organisms:  487","leaf_age_:  29<br />total_organisms:  140","leaf_age_:  30<br />total_organisms:    0","leaf_age_:  33<br />total_organisms:  150","leaf_age_:  40<br />total_organisms:  284","leaf_age_:  42<br />total_organisms:  319","leaf_age_:  44<br />total_organisms:   89","leaf_age_:  47<br />total_organisms:   24","leaf_age_:  56<br />total_organisms:  389","leaf_age_:  57<br />total_organisms:    5","leaf_age_:  58<br />total_organisms:   14","leaf_age_:  62<br />total_organisms:   25","leaf_age_:  68<br />total_organisms:   55","leaf_age_:  70<br />total_organisms:  179","leaf_age_:  71<br />total_organisms:   11","leaf_age_:  72<br />total_organisms:    3","leaf_age_:  75<br />total_organisms:    5","leaf_age_:  83<br />total_organisms:    0","leaf_age_:  84<br />total_organisms:  246","leaf_age_:  85<br />total_organisms:    0","leaf_age_:  87<br />total_organisms:    1","leaf_age_:  90<br />total_organisms:    0","leaf_age_:  96<br />total_organisms:    5","leaf_age_:  98<br />total_organisms:  252","leaf_age_:  99<br />total_organisms:    0","leaf_age_: 100<br />total_organisms:    3","leaf_age_: 102<br />total_organisms:    0","leaf_age_: 104<br />total_organisms:    2","leaf_age_: 112<br />total_organisms:  176","leaf_age_: 113<br />total_organisms:    1","leaf_age_: 115<br />total_organisms:    2","leaf_age_: 116<br />total_organisms:    0","leaf_age_: 118<br />total_organisms:    3","leaf_age_: 124<br />total_organisms:    1","leaf_age_: 126<br />total_organisms:   80","leaf_age_: 127<br />total_organisms:    0","leaf_age_: 129<br />total_organisms:    0","leaf_age_: 130<br />total_organisms:    0","leaf_age_: 132<br />total_organisms:    1","leaf_age_: 140<br />total_organisms:   31","leaf_age_: 141<br />total_organisms:    0","leaf_age_: 143<br />total_organisms:    2","leaf_age_: 145<br />total_organisms:    0","leaf_age_: 146<br />total_organisms:    1","leaf_age_: 152<br />total_organisms:    2","leaf_age_: 154<br />total_organisms:   30","leaf_age_: 155<br />total_organisms:    0","leaf_age_: 157<br />total_organisms:    0","leaf_age_: 160<br />total_organisms:    0","leaf_age_: 168<br />total_organisms:   17","leaf_age_: 169<br />total_organisms:    0","leaf_age_: 171<br />total_organisms:    0","leaf_age_: 174<br />total_organisms:    0","leaf_age_: 180<br />total_organisms:    3","leaf_age_: 182<br />total_organisms:   23","leaf_age_: 183<br />total_organisms:    0","leaf_age_: 185<br />total_organisms:    1","leaf_age_: 188<br />total_organisms:    0","leaf_age_: 190<br />total_organisms:    0","leaf_age_: 196<br />total_organisms:   29","leaf_age_: 197<br />total_organisms:    0","leaf_age_: 199<br />total_organisms:    0","leaf_age_: 202<br />total_organisms:    0","leaf_age_: 209<br />total_organisms:    0","leaf_age_: 210<br />total_organisms:   11","leaf_age_: 211<br />total_organisms:    4","leaf_age_: 213<br />total_organisms:    0","leaf_age_: 215<br />total_organisms:    0","leaf_age_: 216<br />total_organisms:    0","leaf_age_: 224<br />total_organisms:   14","leaf_age_: 225<br />total_organisms:    0","leaf_age_: 227<br />total_organisms:    0","leaf_age_: 230<br />total_organisms:    0","leaf_age_: 238<br />total_organisms:   10","leaf_age_: 239<br />total_organisms:    4","leaf_age_: 241<br />total_organisms:    0","leaf_age_: 242<br />total_organisms:    0","leaf_age_: 252<br />total_organisms:    9","leaf_age_: 253<br />total_organisms:    0","leaf_age_: 255<br />total_organisms:    0","leaf_age_: 258<br />total_organisms:    0","leaf_age_: 266<br />total_organisms:    2","leaf_age_: 267<br />total_organisms:    1","leaf_age_: 272<br />total_organisms:    0","leaf_age_: 280<br />total_organisms:    3","leaf_age_: 281<br />total_organisms:    0","leaf_age_: 283<br />total_organisms:    0","leaf_age_: 286<br />total_organisms:    0","leaf_age_: 294<br />total_organisms:    1","leaf_age_: 295<br />total_organisms:    2","leaf_age_: 297<br />total_organisms:    0","leaf_age_: 300<br />total_organisms:    0","leaf_age_: 308<br />total_organisms:    5","leaf_age_: 309<br />total_organisms:    0","leaf_age_: 314<br />total_organisms:    0","leaf_age_: 322<br />total_organisms:    0","leaf_age_: 323<br />total_organisms:    0","leaf_age_: 328<br />total_organisms:    1","leaf_age_: 336<br />total_organisms:    1","leaf_age_: 337<br />total_organisms:    0","leaf_age_: 342<br />total_organisms:    0","leaf_age_: 351<br />total_organisms:    2","leaf_age_: 356<br />total_organisms:    0","leaf_age_: 364<br />total_organisms:    0","leaf_age_: 365<br />total_organisms:    0","leaf_age_: 370<br />total_organisms:    0","leaf_age_: 380<br />total_organisms:    0","leaf_age_: 384<br />total_organisms:    0","leaf_age_: 393<br />total_organisms:    0","leaf_age_: 398<br />total_organisms:    0","leaf_age_: 413<br />total_organisms:    0","leaf_age_: 426<br />total_organisms:    0"],"type":"scatter","mode":"lines+markers","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(0,0,0,1)","opacity":1,"size":5.66929133858268,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"}},"frame":null}],"layout":{"margin":{"t":40.8401826484018,"r":7.30593607305936,"b":37.2602739726027,"l":48.9497716894977},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"title":{"text":"Organism Abundance over Time (Plant ID A Only)","font":{"color":"rgba(0,0,0,1)","family":"","size":17.5342465753425},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-21.3,447.3],"tickmode":"array","ticktext":["0","100","200","300","400"],"tickvals":[0,100,200,300,400],"categoryorder":"array","categoryarray":["0","100","200","300","400"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":true,"linecolor":"rgba(0,0,0,1)","linewidth":0.66417600664176,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"Leaf age (days)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-72.4,1520.4],"tickmode":"array","ticktext":["0","500","1000","1500"],"tickvals":[0,500,1000,1500],"categoryorder":"array","categoryarray":["0","500","1000","1500"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":true,"linecolor":"rgba(0,0,0,1)","linewidth":0.66417600664176,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"x","title":{"text":"Total organisms","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.689497716895}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"57ac4a322ab2":{"x":{},"y":{},"type":"scatter"},"57ac1a3f69c6":{"x":{},"y":{}}},"cur_data":"57ac4a322ab2","visdat":{"57ac4a322ab2":["function (y) ","x"],"57ac1a3f69c6":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-ff0064eac581c50f3058" style="width:504px;height:504px;"></div>
+<script type="application/json" data-for="htmlwidget-ff0064eac581c50f3058">{"x":{"data":[{"x":[0,12,13,14,16,19,25,28,29,30,33,40,42,44,47,56,57,58,62,68,70,71,72,75,83,84,85,87,90,96,98,99,100,102,104,112,113,115,116,118,124,126,127,129,130,132,140,141,143,145,146,152,154,155,157,160,168,169,171,174,180,182,183,185,188,190,196,197,199,202,209,210,211,213,215,216,224,225,227,230,238,239,241,242,252,253,255,258,266,267,272,280,281,283,286,294,295,297,300,308,309,314,322,323,328,336,337,342,351,356,364,365,370,380,384,393,398,413,426],"y":[949,154,345,1448,11,200,338,487,140,0,150,284,319,89,24,389,5,14,25,55,179,11,3,5,0,246,0,1,0,5,252,0,3,0,2,176,1,2,0,3,1,80,0,0,0,1,31,0,2,0,1,2,30,0,0,0,17,0,0,0,3,23,0,1,0,0,29,0,0,0,0,11,4,0,0,0,14,0,0,0,10,4,0,0,9,0,0,0,2,1,0,3,0,0,0,1,2,0,0,5,0,0,0,0,1,1,0,0,2,0,0,0,0,0,0,0,0,0,0],"text":["leaf_age_:   0<br />total_organisms:  949","leaf_age_:  12<br />total_organisms:  154","leaf_age_:  13<br />total_organisms:  345","leaf_age_:  14<br />total_organisms: 1448","leaf_age_:  16<br />total_organisms:   11","leaf_age_:  19<br />total_organisms:  200","leaf_age_:  25<br />total_organisms:  338","leaf_age_:  28<br />total_organisms:  487","leaf_age_:  29<br />total_organisms:  140","leaf_age_:  30<br />total_organisms:    0","leaf_age_:  33<br />total_organisms:  150","leaf_age_:  40<br />total_organisms:  284","leaf_age_:  42<br />total_organisms:  319","leaf_age_:  44<br />total_organisms:   89","leaf_age_:  47<br />total_organisms:   24","leaf_age_:  56<br />total_organisms:  389","leaf_age_:  57<br />total_organisms:    5","leaf_age_:  58<br />total_organisms:   14","leaf_age_:  62<br />total_organisms:   25","leaf_age_:  68<br />total_organisms:   55","leaf_age_:  70<br />total_organisms:  179","leaf_age_:  71<br />total_organisms:   11","leaf_age_:  72<br />total_organisms:    3","leaf_age_:  75<br />total_organisms:    5","leaf_age_:  83<br />total_organisms:    0","leaf_age_:  84<br />total_organisms:  246","leaf_age_:  85<br />total_organisms:    0","leaf_age_:  87<br />total_organisms:    1","leaf_age_:  90<br />total_organisms:    0","leaf_age_:  96<br />total_organisms:    5","leaf_age_:  98<br />total_organisms:  252","leaf_age_:  99<br />total_organisms:    0","leaf_age_: 100<br />total_organisms:    3","leaf_age_: 102<br />total_organisms:    0","leaf_age_: 104<br />total_organisms:    2","leaf_age_: 112<br />total_organisms:  176","leaf_age_: 113<br />total_organisms:    1","leaf_age_: 115<br />total_organisms:    2","leaf_age_: 116<br />total_organisms:    0","leaf_age_: 118<br />total_organisms:    3","leaf_age_: 124<br />total_organisms:    1","leaf_age_: 126<br />total_organisms:   80","leaf_age_: 127<br />total_organisms:    0","leaf_age_: 129<br />total_organisms:    0","leaf_age_: 130<br />total_organisms:    0","leaf_age_: 132<br />total_organisms:    1","leaf_age_: 140<br />total_organisms:   31","leaf_age_: 141<br />total_organisms:    0","leaf_age_: 143<br />total_organisms:    2","leaf_age_: 145<br />total_organisms:    0","leaf_age_: 146<br />total_organisms:    1","leaf_age_: 152<br />total_organisms:    2","leaf_age_: 154<br />total_organisms:   30","leaf_age_: 155<br />total_organisms:    0","leaf_age_: 157<br />total_organisms:    0","leaf_age_: 160<br />total_organisms:    0","leaf_age_: 168<br />total_organisms:   17","leaf_age_: 169<br />total_organisms:    0","leaf_age_: 171<br />total_organisms:    0","leaf_age_: 174<br />total_organisms:    0","leaf_age_: 180<br />total_organisms:    3","leaf_age_: 182<br />total_organisms:   23","leaf_age_: 183<br />total_organisms:    0","leaf_age_: 185<br />total_organisms:    1","leaf_age_: 188<br />total_organisms:    0","leaf_age_: 190<br />total_organisms:    0","leaf_age_: 196<br />total_organisms:   29","leaf_age_: 197<br />total_organisms:    0","leaf_age_: 199<br />total_organisms:    0","leaf_age_: 202<br />total_organisms:    0","leaf_age_: 209<br />total_organisms:    0","leaf_age_: 210<br />total_organisms:   11","leaf_age_: 211<br />total_organisms:    4","leaf_age_: 213<br />total_organisms:    0","leaf_age_: 215<br />total_organisms:    0","leaf_age_: 216<br />total_organisms:    0","leaf_age_: 224<br />total_organisms:   14","leaf_age_: 225<br />total_organisms:    0","leaf_age_: 227<br />total_organisms:    0","leaf_age_: 230<br />total_organisms:    0","leaf_age_: 238<br />total_organisms:   10","leaf_age_: 239<br />total_organisms:    4","leaf_age_: 241<br />total_organisms:    0","leaf_age_: 242<br />total_organisms:    0","leaf_age_: 252<br />total_organisms:    9","leaf_age_: 253<br />total_organisms:    0","leaf_age_: 255<br />total_organisms:    0","leaf_age_: 258<br />total_organisms:    0","leaf_age_: 266<br />total_organisms:    2","leaf_age_: 267<br />total_organisms:    1","leaf_age_: 272<br />total_organisms:    0","leaf_age_: 280<br />total_organisms:    3","leaf_age_: 281<br />total_organisms:    0","leaf_age_: 283<br />total_organisms:    0","leaf_age_: 286<br />total_organisms:    0","leaf_age_: 294<br />total_organisms:    1","leaf_age_: 295<br />total_organisms:    2","leaf_age_: 297<br />total_organisms:    0","leaf_age_: 300<br />total_organisms:    0","leaf_age_: 308<br />total_organisms:    5","leaf_age_: 309<br />total_organisms:    0","leaf_age_: 314<br />total_organisms:    0","leaf_age_: 322<br />total_organisms:    0","leaf_age_: 323<br />total_organisms:    0","leaf_age_: 328<br />total_organisms:    1","leaf_age_: 336<br />total_organisms:    1","leaf_age_: 337<br />total_organisms:    0","leaf_age_: 342<br />total_organisms:    0","leaf_age_: 351<br />total_organisms:    2","leaf_age_: 356<br />total_organisms:    0","leaf_age_: 364<br />total_organisms:    0","leaf_age_: 365<br />total_organisms:    0","leaf_age_: 370<br />total_organisms:    0","leaf_age_: 380<br />total_organisms:    0","leaf_age_: 384<br />total_organisms:    0","leaf_age_: 393<br />total_organisms:    0","leaf_age_: 398<br />total_organisms:    0","leaf_age_: 413<br />total_organisms:    0","leaf_age_: 426<br />total_organisms:    0"],"type":"scatter","mode":"lines+markers","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(0,0,0,1)","opacity":1,"size":5.66929133858268,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,0,0,1)"}},"frame":null}],"layout":{"margin":{"t":40.8401826484018,"r":7.30593607305936,"b":37.2602739726027,"l":48.9497716894977},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"title":{"text":"Organism Abundance over Time (Plant ID A Only)","font":{"color":"rgba(0,0,0,1)","family":"","size":17.5342465753425},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-21.3,447.3],"tickmode":"array","ticktext":["0","100","200","300","400"],"tickvals":[0,100,200,300,400],"categoryorder":"array","categoryarray":["0","100","200","300","400"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":true,"linecolor":"rgba(0,0,0,1)","linewidth":0.66417600664176,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"Leaf age (days)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-72.4,1520.4],"tickmode":"array","ticktext":["0","500","1000","1500"],"tickvals":[0,500,1000,1500],"categoryorder":"array","categoryarray":["0","500","1000","1500"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":true,"linecolor":"rgba(0,0,0,1)","linewidth":0.66417600664176,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"x","title":{"text":"Total organisms","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.689497716895}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"24c03f253ff":{"x":{},"y":{},"type":"scatter"},"24c0249b36c5":{"x":{},"y":{}}},"cur_data":"24c03f253ff","visdat":{"24c03f253ff":["function (y) ","x"],"24c0249b36c5":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 
 ---
 # Ridgeline Distribution Plot
@@ -326,14 +250,17 @@ g_ridges +
   ggridges::geom_density_ridges(alpha = .7, # Sets the opacity
                                 size = 1.5) # Sets the size of the line
 ```
-
 ---
 class: middle, center
 
-![](Pitcher_Plant_Slides_files/figure-html/plot2-out-1.png)&lt;!-- --&gt;
+
+![](../Output/plot2-out-1.png)&lt;!-- --&gt;
 
 
 ---
+
+
+
 # Bar Plot
 
 ```r
@@ -357,15 +284,15 @@ Plant_summary &lt;- pitcher_plant_data %&gt;% # Select df
 ## 7 G                 6.00      1.58
 ## 8 H                18.7       5.15
 ```
-
 ---
+# Bar Plot
 
 ```r
 Plant_summary %&gt;%
   ggplot(aes(x = Plant.ID.Alpha, # Select x variable
-              y = ants_mean)) + # Select y variable
+             y = ants_mean)) + # Select y variable
    geom_bar(stat = "identity", 
-            fill = my_pal,  # Use custom palatte
+            fill = my_pal,  # Use custom palette
             color = "black") + # Outline of the bar
    geom_errorbar(aes(ymin = ants_mean,  # Set the minimum y value to the mean of the ants
                      ymax = ants_sd), # Set the maximum y value to the sd of the ants
@@ -376,39 +303,15 @@ Plant_summary %&gt;%
         x = "Plant ID") # label X-axis
 ```
 
-![](Pitcher_Plant_Slides_files/figure-html/plot3-1.png)&lt;!-- --&gt;
+![](../Output/plot3-1.png)&lt;!-- --&gt;
 ---
 class: middle, center
 
-![](Pitcher_Plant_Slides_files/figure-html/plot3-out-1.png)&lt;!-- --&gt;
+
+![](../Output/plot3-out-1.png)&lt;!-- --&gt;
+
 
 ---
-# Marginal Plot
-
-.pull-left[
-
-```r
-pitcher_plant_data %&gt;% # select df
-      ggscatterhist( x = "leaf_age_", # Select X variable
-                     y = "ants", # Select Y variable
-                     color = "Plant.ID.Alpha",  # Colors it by the Plant ID Alpha
-                     size = 3, # Sets the size of each point
-                     alpha = 0.6, # Sets the opacity of each point
-        palette = my_pal, # Select palette
-        margin.plot = "boxplot", # selects marginal plot
-        xlab = "Number of Ants", # Label X-Axis
-        ylab = "Age of Leaf (Days)", #Label Y- Axis
-        title = "Ant Abundances Over Time", # Label title
-        ggtheme = theme_bw()  # Sets theme
-        )
-```
-]
-.pull-right[
-![](Pitcher_Plant_Slides_files/figure-html/plot4-out-1.png)&lt;!-- --&gt;
-]
-
----
-# Does the Presence of Colpoda (protozoa) affect the amount of ants seen?
 .pull-left[
 
 ```r
@@ -429,11 +332,35 @@ pitcher_plant_data %&gt;%
 ## Warning: Removed 40 rows containing missing values (`geom_point()`).
 ```
 
-![](Pitcher_Plant_Slides_files/figure-html/plot5-1.png)&lt;!-- --&gt;
+![](../Output/plot5-1.png)&lt;!-- --&gt;
 ]
 .pull-right[
-![](Pitcher_Plant_Slides_files/figure-html/plot5-out-1.png)&lt;!-- --&gt;
+
+![](../Output/plot5-out-1.png)&lt;!-- --&gt;
 ]
+
+---
+
+class: middle, center
+
+# Conclusion
+
+--
+
+
+- Ants have the highest abundance among the other insects.
+
+--
+
+
+- As the leaf ages, there is a decreasing trend in the total number of organisms observed.
+
+--
+
+
+- As the Number of Colpoda increases, there is a decrease in ant abundances.
+
+
 ---
 class: center, middle, inverse
 # Thank you
