@@ -17,15 +17,18 @@ class: inverse, middle
  
  
 --
-1. Brief Introduction into carnivious plants and their feeding mechanisms
+
+- Brief Introduction into carnivorous plants and their feeding mechanisms
 
 
 --
-2. Model System - _Sarracenia purpurea_
+
+- Model System - _Sarracenia purpurea_
 
 
 --
-3. Data/Exploration
+
+- Data/Exploration
 
 ---
 class: inverse
@@ -76,8 +79,9 @@ class: middle
 --
 - Does the number of organisms seen depend on the age of the leaf?
 
+
 --
--Does the Presence of Colpoda (protozoa) affect the amount of ants seen?
+- Does the Presence of Colpoda (protozoa) affect the amount of ants seen?
 
 ---
 # Data Collection
@@ -247,7 +251,7 @@ class: middle, center
 
 ---
 
-```{r, plot5, eval=FALSE, warning=FALSE, message=FALSE}
+```{r, plot4, eval=FALSE, warning=FALSE, message=FALSE}
 pitcher_plant_data %>%
     ggplot(aes(x = Colpoda, # Select X variable
                y = ants, # Select y variable
@@ -263,7 +267,7 @@ pitcher_plant_data %>%
 
 ---
 class: middle, center
-```{r plot5-out, ref.label="plot5", echo=FALSE, warning=FALSE, message=FALSE}
+```{r plot4-out, ref.label="plot4", echo=FALSE, warning=FALSE, message=FALSE}
 ```
 
 
