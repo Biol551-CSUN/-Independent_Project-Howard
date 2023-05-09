@@ -38,7 +38,24 @@ class: inverse
 class: inverse, center, middle
 **There are over 700 species of carnivorous plants around the world!**
 
-The feeding mechanism is very rare!
+**.red[The feeding mechanism is very rare!]**
+
+---
+ # Outline of Presentation
+ 
+ 
+--
+1. Brief Introduction into Carnivious Plants and their Feeding Mechanisms
+
+
+--
+2. Model System - Sarracenia purpurea
+
+
+--
+3. Data/Exploration
+
+
 ---
 class: inverse, center, middle
 
@@ -50,202 +67,108 @@ class: inverse, center, middle
 
 I am interested in the inquiline community of Sarracenia Purpurea
 
-![](https://www.fs.usda.gov/wildflowers/plant-of-the-week/images/purplepitcherplant/SAPU4.gif)
+.center[
+&lt;img src= "https://www.fs.usda.gov/wildflowers/plant-of-the-week/images/purplepitcherplant/SAPU4.gif",, width="50%"/&gt;]
+
+.footnote[[source](https://www.fs.usda.gov/wildflowers/plant-of-the-week/sarracenia_purpurae.shtml)]
+
 ---
 # Feeding Mechanism
 
-![](https://www.gardenia.net/storage/app/public/uploads/images/detail/75e09eb820b5dba9b3a7117a6ea98346.webp)
+.center[&lt;img src= "https://www.gardenia.net/storage/app/public/uploads/images/detail/75e09eb820b5dba9b3a7117a6ea98346.webp", width=80%/&gt;]
 
+.footnote[[(terHorst 2010)](https://onlinelibrary.wiley.com/doi/10.1111/j.1420-9101.2010.02140.x)]
 ---
+
 # Questions
+--
+
 
 - What is the abundance of the organisms seen in purple pitcher plants?
 
+
+--
 - Which Organisms have the highest abundances?
 
+--
 - Does the number of organisms seen depend on the age of the leaf?
-
 
 ---
 # Data Collection
 
 We found 100 leaf bodies and measured the following information:
 
-(column names or picture of excel sheet goes here)
+
+![Screenshot](libs\Images\datasheet_screenshot.PNG)
+
+---
+# Data Collection
+
+![Screenshot](libs\Images\datasheet_screenshot.PNG)
+
 
 ---
 #Load Packages
 
 ```r
 library(tidyverse)
-```
-
-```
-## Warning: package 'tidyverse' was built under R version 4.2.2
-```
-
-```
-## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
-## ✔ ggplot2 3.4.1     ✔ purrr   1.0.1
-## ✔ tibble  3.1.8     ✔ dplyr   1.1.0
-## ✔ tidyr   1.3.0     ✔ stringr 1.5.0
-## ✔ readr   2.1.3     ✔ forcats 1.0.0
-```
-
-```
-## Warning: package 'ggplot2' was built under R version 4.2.2
-```
-
-```
-## Warning: package 'tidyr' was built under R version 4.2.2
-```
-
-```
-## Warning: package 'readr' was built under R version 4.2.2
-```
-
-```
-## Warning: package 'purrr' was built under R version 4.2.2
-```
-
-```
-## Warning: package 'dplyr' was built under R version 4.2.2
-```
-
-```
-## Warning: package 'stringr' was built under R version 4.2.2
-```
-
-```
-## Warning: package 'forcats' was built under R version 4.2.3
-```
-
-```
-## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
-```
-
-```r
 library(here)
-```
-
-```
-## Warning: package 'here' was built under R version 4.2.2
-```
-
-```
-## here() starts at C:/Users/kdh19230/Desktop/Repository/Independent_Project_Howard
-```
-
-```r
 library(ggplot2)
 library(crosstable)
-```
-
-```
-## Warning: package 'crosstable' was built under R version 4.2.3
-```
-
-```
-## 
-## Attaching package: 'crosstable'
-## 
-## The following object is masked from 'package:purrr':
-## 
-##     compact
-```
-
-```r
 library(dplyr)
 library(vtable)
-```
-
-```
-## Warning: package 'vtable' was built under R version 4.2.3
-```
-
-```
-## Loading required package: kableExtra
-```
-
-```
-## Warning: package 'kableExtra' was built under R version 4.2.2
-```
-
-```
-## 
-## Attaching package: 'kableExtra'
-## 
-## The following object is masked from 'package:dplyr':
-## 
-##     group_rows
-```
-
-```r
 library(gganimate)
-```
-
-```
-## Warning: package 'gganimate' was built under R version 4.2.3
-```
-
-```r
 library(hrbrthemes)
-```
-
-```
-## Warning: package 'hrbrthemes' was built under R version 4.2.2
-```
-
-```
-## NOTE: Either Arial Narrow or Roboto Condensed fonts are required to use these themes.
-##       Please use hrbrthemes::import_roboto_condensed() to install Roboto Condensed and
-##       if Arial Narrow is not on your system, please see https://bit.ly/arialnarrow
-```
-
-```r
 library(viridis)
-```
-
-```
-## Warning: package 'viridis' was built under R version 4.2.2
-```
-
-```
-## Loading required package: viridisLite
-```
-
-```
-## Warning: package 'viridisLite' was built under R version 4.2.2
-```
-
-```r
-library(ggridges) # creates ridgeline plots
-```
-
-```
-## Warning: package 'ggridges' was built under R version 4.2.3
-```
-
-```r
+library(ggridges)
 library(ggpubr)
+library(rcartocolor)
+library(DT)
 ```
-
-```
-## Warning: package 'ggpubr' was built under R version 4.2.3
-```
-
 
 ---
+class: center, middle
+
 # Load Data
 
 ```r
 library(here)
 pitcher_plant_data &lt;- read.csv(here("Data/pitcher_plant_data.csv"))
-View(pitcher_plant_data)
+view(pitcher_plant_data)
+```
+# Create Color Pallate
+
+```r
+my_pal &lt;- rcartocolor::carto_pal(n = 8, name = "Bold")[c(1, 3, 7, 2,4,5,6,8)]
 ```
 
+
+---
+# Marginal Plot
+
+.pull-up[
+
+```r
+pitcher_plant_data %&gt;%
+      ggscatterhist( x = "leaf_age_", 
+                     y = "ants",
+                     color = "Plant.ID.Alpha", 
+                     size = 3, 
+                     alpha = 0.6,
+        palette = my_pal,
+        margin.plot = "boxplot",
+        ggtheme = theme_bw()
+        )
+```
+]
+.pull-down[
+
+```
+## Picking joint bandwidth of 33.4
+```
+
+![](Pitcher_Plant_Slides_files/figure-html/wave-label-out-1.png)&lt;!-- --&gt;
+]
 ---
 
 #Lets look at one particular plant ID and the number of organisms over the age the leaf
@@ -273,31 +196,33 @@ pitcher_plant_data$Total_organisms &lt;-
 rowSums(pitcher_plant_data[,c("ants","spiders","beetle","Mosquito","Midges","Snot","Mites")])
 ```
 ---
-
 # Create graph
+.pull-right[
 
 ```r
 library(ggplot2)
 
-ggplot(pitcher_plant_data, aes(x=leaf_age.days.,
+ggplot(pitcher_plant_data, aes(x=leaf_age_,
                                y=Total_organisms)) + 
   geom_line() +
   labs(title = "Total Organisms Over Time in Plant A",
        x = "Age of Leaf", 
        y = "Total Organisms") 
 ```
-
-![](Pitcher_Plant_Slides_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+]
+.pull-left[
+![](Pitcher_Plant_Slides_files/figure-html/plot3-out-1.png)&lt;!-- --&gt;
+]
 
 ---
 # Ridgeline Distrinution Plot
 This is showing the number of mites of leaf age
 
-```r
-my_pal &lt;- rcartocolor::carto_pal(n = 8, name = "Bold")[c(1, 3, 7, 2,4,5,6,8)]
+.pull-right[
 
+```r
 g_ridges &lt;- 
-  ggplot(pitcher_plant_data, aes(leaf_age.days., fct_rev(Plant.ID.Alpha), color = Plant.ID.Alpha, fill = Plant.ID.Alpha)) + 
+  ggplot(pitcher_plant_data, aes(leaf_age_, fct_rev(Plant.ID.Alpha), color = Plant.ID.Alpha, fill = Plant.ID.Alpha)) + 
   coord_cartesian(clip = "off") +
   scale_y_discrete(expand = c(.07, .07)) +
   scale_color_manual(values = my_pal, guide = "none") +
@@ -312,31 +237,8 @@ g_ridges +
     alpha = .7, size = 1.5
   )
 ```
-
-```
-## Picking joint bandwidth of 33.4
-```
-
-![](Pitcher_Plant_Slides_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
-
----
-# Marginal Plot
-.pull-left[
-
-```r
-ggscatterhist(pitcher_plant_data, 
-              x = "leaf_age.days.", 
-              y = "ants",
-              color = "Plant.ID.Alpha", 
-              size = 3, 
-              alpha = 0.6,
-  palette = my_pal,
-  margin.plot = "boxplot",
-  ggtheme = theme_bw()
-  )
-```
 ]
-.pull-right[
+.pull-left[
 ![](Pitcher_Plant_Slides_files/figure-html/plot-label-out-1.png)&lt;!-- --&gt;
 ]
 
@@ -364,17 +266,27 @@ df.summary
 ## 7 G                 6.00      1.58
 ## 8 H                18.7       5.15
 ```
+
 ---
 
-
 ```r
-ggplot(df.summary, aes(x = Plant.ID.Alpha, 
-                       y = ants_mean)) +
-  geom_bar(stat = "identity", fill = "green", color = "black") +
-  geom_errorbar(aes(ymin = ants_mean, ymax = ants_sd), width = 0.2)
+df.summary %&gt;%
+  ggplot(aes(x = Plant.ID.Alpha, 
+              y = ants_mean)) +
+   geom_bar(stat = "identity", 
+            fill = my_pal, 
+            color = "black") +
+   geom_errorbar(aes(ymin = ants_mean, 
+                     ymax = ants_sd), 
+                     width = 0.2) +
+      theme_minimal() +
+      coord_flip() +
+  labs( y= "Average Number of Ants",
+        x = "Plant ID")
 ```
 
-![](Pitcher_Plant_Slides_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+![](Pitcher_Plant_Slides_files/figure-html/bar_label-1.png)&lt;!-- --&gt;
+
 ---
 
     </textarea>

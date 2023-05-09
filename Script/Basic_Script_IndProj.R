@@ -56,11 +56,11 @@ view(sum)
 #You can create a time series for one of the specific plants and the nu
 
 Plant.ID.A <- pitcher_plant_data %>%
-  select(Plant.ID.Alpha, leaf_age.days.,ants)
+  select(Plant.ID.Alpha, leaf_age_,ants)
 
 # Here overtime, you can see that the number of dead ants, decreases as the age of the leaf decreases
 Plant.ID.A %>%
-  ggplot(aes(x = leaf_age.days.,
+  ggplot(aes(x = leaf_age_,
              y = ants)) +
   geom_point(stat = "identity") + 
   labs(title = " Insert Title ",
@@ -71,7 +71,7 @@ Plant.ID.A %>%
 
 
 Plant.ID.A %>%
-  ggplot(aes(x = leaf_age.days.,
+  ggplot(aes(x = leaf_age_,
              y = ants)) +
   geom_point(shape=21, color="black", fill='yellow', size=2) +
   labs(title = " Insert Title ",
@@ -84,7 +84,7 @@ pitcher_plant_data$Plant.ID.Alpha
 
 
 pitcher_plant_data %>%
-  ggplot( aes(x= leaf_age.days., y= ants, group= Plant.ID.Alpha, color=Plant.ID.Alpha)) +
+  ggplot( aes(x= leaf_age_, y= ants, group= Plant.ID.Alpha, color=Plant.ID.Alpha)) +
   geom_line() +
   geom_point() +
   scale_color_viridis(discrete = TRUE) +
@@ -112,7 +112,7 @@ pitcher_plant_data$Total_organisms <- rowSums(pitcher_plant_data[,c("ants","spid
 
 print(Total_organisms)
 # Create a time series plot of total organisms over time
-# ggplot(pitcher_plant_data, aes(x=leaf_age.days., y=Total_organisms)) + 
+# ggplot(pitcher_plant_data, aes(x=leaf_age_, y=Total_organisms)) + 
 #   geom_line() +
 #   labs(title = "Total Organisms Over Time in Plant A", x = "Age of Leaf", y = "Total Organisms")
 
@@ -137,11 +137,11 @@ print(Total_organisms)
   abundance_data <- data[, c(2:7)]
 view(abundance_data)
 # convert the data to a long format
-abundance_data_long <- tidyr::gather(abundance_data, "leaf_age.days.", "abundance", -Plant.ID.Numeric)
+abundance_data_long <- tidyr::gather(abundance_data, "leaf_age_", "abundance", -Plant.ID.Numeric)
 view(abundance_data_long)
 
 # plot the ridgeline density plot
-ggplot(abundance_data_long, aes(x = leaf_age.days.,
+ggplot(abundance_data_long, aes(x = leaf_age_,
                                 y = Plant.ID.Numeric, 
                                 height = abundance, 
                                 fill = Plant.ID.Numeric)) +
@@ -156,7 +156,7 @@ ggplot(abundance_data_long, aes(x = leaf_age.days.,
 my_pal <- rcartocolor::carto_pal(n = 8, name = "Bold")[c(1, 3, 7, 2,4,5,6,8)]
 
 g_ridges <- 
-  ggplot(data, aes(leaf_age.days., fct_rev(Plant.ID.Alpha), color = Plant.ID.Alpha, fill = spiders)) + 
+  ggplot(data, aes(leaf_age_, fct_rev(Plant.ID.Alpha), color = Plant.ID.Alpha, fill = spiders)) + 
   coord_cartesian(clip = "off") +
   scale_y_discrete(expand = c(.07, .07)) +
   scale_color_manual(values = my_pal, guide = "none") +
