@@ -9,7 +9,7 @@ This repository contains the final project assignment for BIO551 at CSUN (SPRING
 The data were collected using different methods	:
 - The Volume (mL),	Color,	Dead,	ants,	spiders,	beetle,	and other prey columns were physical aspects of each pitcher noted when it was censused every two weeks.		
 - The Mosquito, Stage 1,	Stage 2,	Stage 3,	Stage 4,	Midges,	Snot, and	Mites columns were larger species that were counted in the field.  Samples were poured into a petri dish and observed at ~10x using a dissecting scope.
--  The Rotifers,	Bodo,	Colpoda, and Chrysomonads columns are data from ~0.5 ml samples collected in the field and brought back to the lab.  In the lab, they were counted using a 0.1 ml sample under a palmer cell, counted at 100x.  When the densities were too high, a heamacytometer was used (see Changes sheet).		
+-  The Rotifers,	Bodo,	Colpoda, and Chrysomonads columns are data from ~0.5 ml samples collected in the field and brought back to the lab.  In the lab, they were counted using a 0.1 ml sample under a palmer cell, counted at 100x. 		
 - pink columns are bacterial abundances, obtained by taking 0.05 ml. of the sample used for the green columns, then using serial dilutions of 10-5 and 10-7 then grown on a weak Luria agar plate.  Colonies were placed into morphotypes as best we could.		
 
 # Contents
